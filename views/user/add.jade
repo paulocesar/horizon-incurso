@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  .row-fluid
+    .span6
+      -if(users)
+        -each user in users
+          p !{user.email+' - '+user.password}
+    .span6
+      form(method="POST")
+        h4 Add User
+        input#email(name="email",type="text",placeholder=__('email'))
+        br
+        input#password(name="password",type="password",placeholder=__('password'))
+        br
+        input#passwordconfirm(name="passwordconfirm",type="password",placeholder=__('password confirm'))
+        br
+        select#role(name="role")
+          option(value='3') !{__('User')}
+          option(value='2') !{__('Manager')}
+          option(value='1') !{__('Administrator')}
+        br
+        button.btn(type="submit") !{__('Register')}

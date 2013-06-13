@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  .row-fluid
+    .span6
+    .span6
+      form(method="POST")
+        h4 Add User
+        input#email(name="email",type="text",placeholder=__('email'))
+        br
+        input#password(name="password",type="password",placeholder=__('password'))
+        br
+        button.btn(type="submit") !{__('Enter')}
