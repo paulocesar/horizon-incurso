@@ -3,13 +3,37 @@ html
     title Incurso
     link(rel='stylesheet',href='/css/bootstrap.min.css')
     link(rel='stylesheet',href='/css/bootstrap-responsive.min.css')
+    link(rel='stylesheet',href='/css/incurso.css')
     block css
   body
     header
+      .navbar(style="margin-bottom:0px")
+        .navbar-inner
+          .span12
+            a.brand(href='#') Incurso
+            ul.nav(style='float:right')
+              -if(session_user)
+                li(style='text-align:right')
+                  a(href='#') !{__('Home')}
+                li
+                  a(href='/session/logout') !{__('Logout')}
+              -else
+                li
+                  form.form-inline(method="POST")
+                    input.input-small(name="email",type="text",placeholder=__('email'))
+                    input.input-small(name="password",type="password",placeholder=__('password'))
+                    button.btn.btn-small(type="submit") !{__('Enter')}
+    -if(flash_warning)
+      .alert.alert !{flash_warning}
+    -if(flash_error)
+      .alert.alert-error !{flash_error}
+    -if(flash_success)
+      .alert.alert-success !{flash_success}
+    -if(flash_info)
+      .alert.alert-success !{flash_info}
     .container
       block content
     footer
-      p running on node with Express
-    //- script(src='/js/jquery-2.0.2.min.js')
+    script(src='/js/jquery-2.0.2.min.js')
     script(src='/js/bootstrap.min.js')
     block script

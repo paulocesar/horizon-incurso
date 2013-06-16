@@ -5,10 +5,12 @@ block content
     .span6
       -if(users)
         -each user in users
-          p !{user.email+' - '+user.password}
+          p !{user.name+' ('+user.email + ')'}
     .span6
       form(method="POST")
         h4 Add User
+        input#name(name="name",type="text",placeholder=__('name'))
+        br
         input#email(name="email",type="text",placeholder=__('email'))
         br
         input#password(name="password",type="password",placeholder=__('password'))

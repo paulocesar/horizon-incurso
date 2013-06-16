@@ -1,4 +1,5 @@
 exports.module = {
+  'name' : 'nome',
   'email' : 'email',
   'password' : 'senha',
   'password confirm' : 'confirmar senha',
@@ -7,4 +8,8 @@ exports.module = {
   'Administrator' : 'Administrador',
   'Enter' : 'Entrar',
   'Register' : 'Registrar',
+  '403' : 'Você não tem permissão',
+  '500' : 'Houve um erro no servidor, entre em contato com o administrador',
+  'Home' : 'Principal',
+  'Logout' : 'Sair',
 }

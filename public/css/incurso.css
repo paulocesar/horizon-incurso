@@ -1,0 +1,12 @@
+form.form-inline {
+  margin:0px;
+}
+input.input-small {
+  height: 30px;
+  margin: 5px;
+  margin-left:0px;
+  margin-top:10px;
+}
+button.btn-small {
+  padding-top: -5px;
+}
