@@ -1,4 +1,43 @@
 extends ../layout
 
 block content
-  p hello world!
+  br
+  .row-fluid
+    .span3
+      ul.well.nav.nav-list
+        -if(session_user.role == 1 || session_user.role == 2)
+          li
+            a.btn.btn-add-channel
+              i.icon-plus-sign
+              !{' '+__('Channel')}
+        li.nav-header !{__('Institution')}
+        li
+          a(href='#') Organizacaion1
+        li
+          a(href='#') nnsolutions1
+    .span6
+      .form-add-channel
+        form.form-horizontal.thumbnail
+          .control-group
+            .controls
+              h4 !{__('Add Channel')}
+          .control-group
+            label.control-label(for='channel_name') !{__('Channel')}
+            .controls
+              input#channel_name
+          .control-group
+            label.control-label(for='channel_description') !{__('Description')}
+            .controls
+              textarea#channel_description
+          .control-group
+            .controls
+              input#channel_description(type='submit') !{__('Save')}
+      ul.thumbnails
+        li.span12
+          a.thumbnail(href='#',style="text-decoration:none;background-color:#F7F7F7")
+            h4(style='padding-left:10px;padding-right:10px') curso 1
+            p(style='padding-left:10px;padding-right:10px') exemplo de curso a ser cursado
+    .span3.thumbnail(style='height:400px')
+
+block script
+  script(src='/js/incurso-channels.js')

@@ -14,4 +14,10 @@ exports.module = {
   'Logout' : 'Sair',
   'Users' : 'Usuários',
   'Add User' : 'Adicionar Usuário',
+  'Config' : 'Configurações',
+  'Institution' : 'Instituição',
+  'Channel' : 'Canal',
+  'Add Channel' : 'Adicionar Canal',
+  'Description' : 'Descrição',
+  'Save' : 'Salvar',
 }

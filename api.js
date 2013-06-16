@@ -161,7 +161,12 @@ exports.policy_auth_channel_view = function(req,res,ok) {
 
 //==============SESSION================
 
-exports.get_session_login = function(req,res) {res.render('session/login');}
+exports.get_session_login = function(req,res) {
+  if(req.session.user)
+    res.redirect('/search');
+  else
+    res.render('session/login');
+}
 exports.post_session_login = function(req,res) {
   email = req.body.email;
   password = req.body.password;
@@ -236,6 +241,10 @@ exports.post_user_edit = function(req,res){
 
 exports.get_user_delete = function(req,res) {
   User.remove({_id:req.query._id},function(err){
+    if(err)
+      req.flash('error', 'Houve um erro ao excluir: '+err.err);
+    else
+      req.flash('success', 'Usuário removido com sucesso');
     res.redirect('/user/index');
   });
 }
@@ -244,8 +253,11 @@ exports.get_user_delete = function(req,res) {
 //==============CHANNEL================
 
 exports.get_channel_index = function(req,res) {
-  // console.log(res);
-  res.render('channel/search');
+  Channel.find({}).exec(function(err,channels){
+    if(err)
+      req.flash('error','Houve um erro ao buscar por canais');
+    res.render('channel/search',{channels:channels});
+  });
 }
 
 exports.get_channel_view = function(req,res) {
@@ -254,8 +266,19 @@ exports.get_channel_view = function(req,res) {
 exports.post_channel_create = function(req,res) {
   c = req.body;
   c._owner = req.session.user._id;
-  // if(c.name != '' && c.description != '' && (c.access == 1 || c.access == 2));
-  res.send('channel home!');
+  if(c.name != '' && c.description != '' && (c.access == 1 || c.access == 2))
+    User({
+      name : c.name,
+      description : c.description,
+      access : c.access,
+      owner : c._owner
+    }).save(function(err){
+      if(err)
+        req.flash('error','Não foi possível salvar: '+err.err);
+      else
+        req.flash('success','O Canal foi salvo com sucesso');
+      res.redirect('channel/search');
+    });
 }
 
 

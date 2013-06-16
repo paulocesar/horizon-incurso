@@ -9,28 +9,34 @@ html
     header
       .navbar(style="margin-bottom:0px")
         .navbar-inner
-          .span12
-            a.brand(href='#') Incurso
-            ul.nav(style='float:right')
+          .row-fluid
+            .span3
+              a.brand(href='#') Incurso
+            .span5
               -if(session_user)
-                li
-                  a(href='#') !{__('Home')}
-                -if(session_user.role == 1)
-                  li(style)
-                    a(href='/user/index') !{__('Users')}
-                li
-                  a(href='/session/logout') !{__('Logout')}
-              -else
-                li
-                  form.form-inline(method="POST")
-                    input.input-small(name="email",type="text",placeholder=__('email'))
-                    input.input-small(name="password",type="password",placeholder=__('password'))
-                    button.btn.btn-small(type="submit") !{__('Enter')}
-    //- -if(flash)
-    //-   -if(flash['error'])
-    //-     .alert.alert-error !{flash['error']}
-    //-   -if(flash['success'])
-    //-     .alert.alert-success !{flash['success']}
+                div.form-search(style='margin-top:5px;margin-bottom:0px')
+                  .input-append
+                    input.span4.search-query(style='width:100%')
+                    a.btn.horizon(type='submit',href='#incurso_search',style='height:19px')
+                      i.icon-search
+            .span4
+              ul.nav(style='float:right')
+                -if(session_user)
+                  li
+                    a(href='/search') !{__('Home')}
+                  -if(session_user.role == 1)
+                    li(style)
+                      a(href='/user/index') !{__('Users')}
+                  li
+                    a(href='/#') !{__('Config')}
+                  li
+                    a(href='/session/logout') !{__('Logout')}
+                -else
+                  li
+                    form.form-inline(method="POST")
+                      input.input-small(name="email",type="text",placeholder=__('email'))
+                      input.input-small(name="password",type="password",placeholder=__('password'))
+                      button.btn.btn-small(type="submit",style="margin-top:-2px") !{__('Enter')}
     -while(messages.length)
       -message = messages.pop()
       div(class="alert alert-"+message[0],style='text-align:center') !{message[1]}

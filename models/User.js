@@ -8,7 +8,7 @@ var model = Schema({
   password: String,
   role: {type:Number,min:1,max:3}, //Administrator, Manager or User
   permissions: [{
-    _user : {type: Schema.Types.ObjectId, ref: 'Channel'},
+    _channel : {type: Schema.Types.ObjectId, ref: 'Channel'},
     level: {type: Number, min:1, max:2}, //view or edit
   }]
 });
