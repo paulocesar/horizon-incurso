@@ -84,7 +84,7 @@ exports.policy_auth_admin = function(req,res,ok) {
 exports.policy_auth_manager = function(req,res,ok) {
   if(!req.session.user)
     res.redirect('/');
-  else if(req.session.user.role == 1 || req.session.user.role == 2)
+  else if(req.session.user.role == 1 || req.session.usper.role == 2)
     res.redirect('/search');
   else
     ok();
@@ -195,7 +195,7 @@ exports.get_session_logout = function(req,res) {
 //===============USER=================
 
 exports.get_user_index = function(req,res) {
-  User.find().exec(function(err,users){
+  User.find({}).exec(function(err,users){
     res.render('user/create',{users:users});
   });
 }
@@ -203,7 +203,7 @@ exports.get_user_index = function(req,res) {
 exports.post_user_create = function(req,res){
   if(req.body.password == req.body.passwordconfirm
     && req.body.password != '' 
-    && req.body.password > 5
+    && req.body.password.length > 5
     && req.body.email != ''
     && req.body.name != '') {
     User({
@@ -211,14 +211,21 @@ exports.post_user_create = function(req,res){
       email:req.body.email,
       password:passwordHash(req.body.password),
       role:req.body.role
-    }).save(function(err){res.redirect('/user/add')});
-  }else{ 
-    res.redirect('/user/create');
+    }).save(function(err){
+      console.log(err);
+      if(err)
+        req.flash('error','Usuário inválido: '+err.err);
+      else
+        req.flash('success','Usuario salvo com sucesso');
+      res.redirect('/user/index');
+    });
+  }else{
+    res.redirect('/user/index');
   }
 }
 
 exports.get_user_edit = function(req,res) {
-  User.find().exec(function(err,users){
+  User.find({}).exec(function(err,users){
     res.render('user/create',{users:users});
   });
 }
@@ -228,14 +235,16 @@ exports.post_user_edit = function(req,res){
 }
 
 exports.get_user_delete = function(req,res) {
-
+  User.remove({_id:req.query._id},function(err){
+    res.redirect('/user/index');
+  });
 }
 
 
 //==============CHANNEL================
 
 exports.get_channel_index = function(req,res) {
-  console.log(res);
+  // console.log(res);
   res.render('channel/search');
 }
 
@@ -243,6 +252,9 @@ exports.get_channel_view = function(req,res) {
   res.send('channel home!');
 }
 exports.post_channel_create = function(req,res) {
+  c = req.body;
+  c._owner = req.session.user._id;
+  // if(c.name != '' && c.description != '' && (c.access == 1 || c.access == 2));
   res.send('channel home!');
 }
 

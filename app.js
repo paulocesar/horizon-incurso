@@ -17,7 +17,7 @@ mongoose.connection.on('error',function(err){
 
 function incurso(app) {
   app.configure(function(){
-    console.log(__dirname);
+    // console.log(__dirname);
     app.set('views',__dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.static(__dirname + '/public'));
@@ -45,6 +45,17 @@ function incurso(app) {
       else
         res.locals.session_user = null;
       next();
+    });
+    //flash
+    app.use(function(req, res, next) {
+      var session = req.session;
+      var messages = session.messages || (session.messages = []);
+
+      req.flash = function(type, message) {
+        messages.push([type, message])
+      }
+      res.locals.messages = req.session.messages;
+      next()
     });
 
     app.use(app.router);

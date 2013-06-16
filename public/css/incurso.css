@@ -7,6 +7,17 @@ input.input-small {
   margin-left:0px;
   margin-top:10px;
 }
+input.input {
+  height: 30px;
+  width: 100%;
+  margin: 5px;
+  margin-left:0px;
+  margin-top:10px;
+}
 button.btn-small {
   padding-top: -5px;
+}
+
+div.overflow {
+  overflow: scroll;
 }

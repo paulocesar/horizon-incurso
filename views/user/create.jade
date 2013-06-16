@@ -2,24 +2,59 @@ extends ../layout
 
 block content
   .row-fluid
-    .span6
-      -if(users)
-        -each user in users
-          p !{user.name+' ('+user.email + ')'}
-    .span6
-      form(method="POST")
-        h4 Add User
-        input#name(name="name",type="text",placeholder=__('name'))
-        br
-        input#email(name="email",type="text",placeholder=__('email'))
-        br
-        input#password(name="password",type="password",placeholder=__('password'))
-        br
-        input#passwordconfirm(name="passwordconfirm",type="password",placeholder=__('password confirm'))
-        br
-        select#role(name="role")
+    .span4
+      h4 !{__('Administrator')}
+      .overflow(style="height:250px")
+        -if(users)
+          -each user in users
+            -if(user.role == 1)
+              p
+               a.horizon(href='#!incurso_user_edit&_id='+user._id)
+                i.icon-edit
+               | !{' '}
+               a.horizon(href='#!incurso_user_remove&_id='+user._id)
+                i.icon-remove
+               | !{' '+user.name+' ('+user.email+') '}
+    .span4
+      h4 !{__('Manager')}
+      .overflow(style="height:250px")
+        -if(users)
+          -each user in users
+            -if(user.role == 2)
+              p
+               a.horizon(href='#incurso_user_edit&_id='+user._id)
+                i.icon-edit
+               | !{' '}
+               a.horizon(href='#incurso_user_remove&_id='+user._id)
+                i.icon-remove
+               | !{' '+user.name+' ('+user.email+') '}
+    .span4
+      h4 !{__('Users')}
+      .overflow(style="height:250px")
+        -if(users)
+          -each user in users
+            -if(user.role == 3)
+              p
+               a.horizon(href='#incurso_user_edit&_id='+user._id)
+                i.icon-edit
+               | !{' '}
+               a.horizon(href='#incurso_user_remove&_id='+user._id)
+                i.icon-remove
+               | !{' '+user.name+' ('+user.email+') '}
+  .row-fluid
+    .span4
+      form(method="post",action='/user/create')
+        h4 !{__('Add User')}
+        input.input(name="name",type="text",placeholder=__('name'))
+        input.input(name="email",type="text",placeholder=__('email'))
+        input.input(name="password",type="password",placeholder=__('password'))
+        input.input(name="passwordconfirm",type="password",placeholder=__('password confirm'))
+        select.input(name="role")
           option(value='3') !{__('User')}
           option(value='2') !{__('Manager')}
           option(value='1') !{__('Administrator')}
         br
         button.btn(type="submit") !{__('Register')}
+
+block script
+  script(src='/js/incurso-users.js')

@@ -13,8 +13,11 @@ html
             a.brand(href='#') Incurso
             ul.nav(style='float:right')
               -if(session_user)
-                li(style='text-align:right')
+                li
                   a(href='#') !{__('Home')}
+                -if(session_user.role == 1)
+                  li(style)
+                    a(href='/user/index') !{__('Users')}
                 li
                   a(href='/session/logout') !{__('Logout')}
               -else
@@ -23,17 +26,18 @@ html
                     input.input-small(name="email",type="text",placeholder=__('email'))
                     input.input-small(name="password",type="password",placeholder=__('password'))
                     button.btn.btn-small(type="submit") !{__('Enter')}
-    -if(flash_warning)
-      .alert.alert !{flash_warning}
-    -if(flash_error)
-      .alert.alert-error !{flash_error}
-    -if(flash_success)
-      .alert.alert-success !{flash_success}
-    -if(flash_info)
-      .alert.alert-success !{flash_info}
+    //- -if(flash)
+    //-   -if(flash['error'])
+    //-     .alert.alert-error !{flash['error']}
+    //-   -if(flash['success'])
+    //-     .alert.alert-success !{flash['success']}
+    -while(messages.length)
+      -message = messages.pop()
+      div(class="alert alert-"+message[0],style='text-align:center') !{message[1]}
     .container
       block content
     footer
     script(src='/js/jquery-2.0.2.min.js')
     script(src='/js/bootstrap.min.js')
+    script(src='/js/horizon.js')
     block script
