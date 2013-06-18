@@ -20,4 +20,10 @@ exports.module = {
   'Add Channel' : 'Adicionar Canal',
   'Description' : 'Descrição',
   'Save' : 'Salvar',
+  'Access' : 'Acesso',
+  'Private' : 'Privado',
+  'Public' : 'Público',
+  'Conference' : 'Conferência',
+  'Material' : 'Material',
+  'Edit' : 'Editar'
 }

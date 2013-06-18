@@ -6,11 +6,8 @@ var model = Schema({
   access : {type: Number, min: 1, max: 2, default: 1}, //private or public
   name: String,
   description: String,
+  active: {type:Number,min:0,max:1,default:1},
   _owner : {type: Schema.Types.ObjectId, ref: 'User'},
-  permissions : [{
-    _user : {type: Schema.Types.ObjectId, ref: 'User'},
-    level: {type: Number, min:1, max:2}, //view or edit
-  }],
 });
 
 model.path('name').required(true);

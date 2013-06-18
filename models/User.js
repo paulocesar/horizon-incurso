@@ -5,12 +5,12 @@ var model = Schema({
   _id : Schema.Types.ObjectId,
   name: String,
   email: {type: String, unique: true},
+  description: String,
+  image: String,
   password: String,
+  confirmed: {type:Number,min:0,max:1,default:1},
+  active: {type:Number,min:0,max:1,default:1},
   role: {type:Number,min:1,max:3}, //Administrator, Manager or User
-  permissions: [{
-    _channel : {type: Schema.Types.ObjectId, ref: 'Channel'},
-    level: {type: Number, min:1, max:2}, //view or edit
-  }]
 });
 
 model.path('email').required(true);

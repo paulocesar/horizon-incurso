@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  br
+  .row-fluid
+    .span3.well
+      ul.nav.nav-list
+        -if(session_user.role == 1 || session_user._id == chan._owner._id)
+          li
+            a.btn(href='#')
+              i.icon-play
+              !{" "+__("Conference")}
+          li
+            a.btn(href='#')
+              i.icon-plus-sign
+              !{" "+__("Material")}
+          li
+            a.btn(href='#')
+              i.icon-edit 
+              !{" "+__("Edit")}
+        li.divider
+        li
+          h4
+            a(href='#') 
+             !{chan.name}
+        li.divider
+        li
+          p 
+            !{chan.description}
+        li.divider
+        li
+          !{chan._owner.name}
+        li
+          !{'('+chan._owner.email+')'}
