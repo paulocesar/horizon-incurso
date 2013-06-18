@@ -10,11 +10,16 @@ block content
             a.btn.btn-add-channel
               i.icon-plus-sign
               !{' '+__('Channel')}
-        li.nav-header !{__('Institution')}
+        li.nav-header !{__('My Courses')}
         li
-          a(href='#') Organizacaion1
+          a(href='#') Futuro link
         li
-          a(href='#') nnsolutions1
+          a(href='#') Curso Exemplo
+        li.nav-header !{__('Areas')}
+        li
+          a(href='#') Matemática
+        li
+          a(href='#') Informática
     .span6
       -if(session_user.role == 1 || session_user.role == 2)
         .form-add-channel

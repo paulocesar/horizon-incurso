@@ -25,5 +25,7 @@ exports.module = {
   'Public' : 'Público',
   'Conference' : 'Conferência',
   'Material' : 'Material',
-  'Edit' : 'Editar'
+  'Edit' : 'Editar',
+  'My Courses' : 'Meus Cursos',
+  'Areas' : 'Áreas',
 }
