@@ -7,16 +7,24 @@ block content
       ul.nav.nav-list
         -if(session_user.role == 1 || session_user._id == chan._owner._id)
           li
-            a.btn(href='#')
-              i.icon-play
+            a.btn.btn-align-left.horizon_menu_index(href='#1')
+              i.icon-play.btn-align-left
               !{" "+__("Conference")}
           li
-            a.btn(href='#')
-              i.icon-plus-sign
+            a.btn.btn-align-left.horizon_menu_index(href='#2')
+              i.icon-plus-sign.btn-align-left
               !{" "+__("Material")}
           li
-            a.btn(href='#')
-              i.icon-edit 
+            a.btn.btn-align-left.horizon_menu_index(href='#3')
+              i.icon-eye-open.btn-align-left
+              !{" "+__("Invite")}
+          li
+            a.btn.btn-align-left.horizon_menu_index(href='#4')
+              i.icon-eye-close.btn-align-left
+              !{" "+__("Uninvite")}
+          li
+            a.btn.btn-align-left.horizon_menu_index(href='#5')
+              i.icon-edit.btn-align-left 
               !{" "+__("Edit")}
         li.divider
         li
@@ -32,3 +40,49 @@ block content
           !{chan._owner.name}
         li
           !{'('+chan._owner.email+')'}
+    .span6
+      -if(session_user.role == 1 || session_user._id == chan._owner._id)
+        #1.horizon_menu_item.well
+          form.form-inline
+            h4 !{__('Start Live Conference')}
+            input.input(type='text',placeholder=__('Name'))
+            button.btn !{__('Enter')}
+        #2.horizon_menu_item.well
+          form.form-inline
+            h4 !{__('Add Material')}
+            p
+              i.icon-info-sign
+              !{' '+__('A Material is used to group archives (pdf, powerpoint, videos, etc)')}
+            input.input(type='text',placeholder=__('Name'))
+            button.btn !{__('Enter')}
+        #3.horizon_menu_item.well
+          form.form-inline
+            h4 !{__('Invite User')}
+            input.input(type='text',placeholder=__('Email'))
+            button.btn !{__('Invite')}
+        #4.horizon_menu_item.well
+          p Hello 4
+        #5.horizon_menu_item.well
+          p Hello 5
+      h3 !{__('Material')}
+      a.thumbnail.well(href='#')
+        h4 material 1
+        p adicionar materiais como videos, ppowerpoints e outras coisas
+      a.thumbnail.well(href='#')
+        h4 material 2
+        p pode haver uma breve descrição do que se trata para guiar o aluno
+      a.thumbnail.well(href='#')
+        h4 material 3
+        p caso haja um erro, acesse o material para edita-lo
+      a.thumbnail.well(href='#')
+        h4 material 4
+        p aqui é outro exemplo de material do professor
+    .span3
+
+block script
+  script(src='/js/horizon-menu.js')
+  script.
+    (function($) {
+      $('div.horizon_menu_item').hide();
+      HorizonMenu.init(['#1','#2','#3','#4','#5']);
+    })(jQuery);

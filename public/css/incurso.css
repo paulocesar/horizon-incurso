@@ -18,3 +18,15 @@ input.input {
 div.overflow {
   overflow: scroll;
 }
+
+a.btn-align-left {
+  text-align:left;
+}
+i.btn-align-left {
+  margin-left:20px;
+}
+
+a.thumbnail {
+  padding: 10px;
+  text-decoration: none;
+}

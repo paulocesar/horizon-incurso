@@ -1,5 +1,6 @@
 exports.module = {
   'name' : 'nome',
+  'Name' : 'Nome',
   'email' : 'email',
   'password' : 'senha',
   'password confirm' : 'confirmar senha',
@@ -28,4 +29,10 @@ exports.module = {
   'Edit' : 'Editar',
   'My Courses' : 'Meus Cursos',
   'Areas' : 'Áreas',
+  'Invite' : 'Convidar',
+  'Uninvite' : 'Desconvidar',
+  'Start Live Conference' : 'Iniciar Conferência Ao Vivo',
+  'Invite User' : 'Convidar Usuário',
+  'Add Material' : 'Adicionar Material',
+  'A Material is used to group archives (pdf, powerpoint, videos, etc)' : 'Um Material serve para agrupar um ou mais arquivos (pdf, powerpoint, video, etc)',
 }

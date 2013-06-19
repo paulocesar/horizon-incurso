@@ -48,9 +48,12 @@ block content
       ul.thumbnails
         li.span12
           -for channel, key in channels
-            a.thumbnail.well(href='/channel?channel='+channel._id,style="text-decoration:none")
-              h4(style='padding-left:10px;padding-right:10px') !{channel.name}
-              p(style='padding-left:10px;padding-right:10px') !{channel.description}
+            a.thumbnail.well(href='/channel?channel='+channel._id)
+              h4 !{channel.name}
+              -if(channel.description.length > 131)
+                p !{channel.description.substring(0,131)+'...'}
+              -else
+                p !{channel.description}
     .span3.thumbnail(style='height:400px')
 
 block script

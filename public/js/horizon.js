@@ -33,5 +33,6 @@ var Horizon = {
     action = element.prop(property).split(Horizon.cmd);
     if(action[1])
       Horizon.interpret(action[1]);
-  },
+  }
 };
+
