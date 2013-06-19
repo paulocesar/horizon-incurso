@@ -31,6 +31,7 @@ exports.i18n = lang;
 var Channel = require('./models/Channel.js');
 var User = require('./models/User.js');
 var ChannelUser = require('./models/ChannelUser.js');
+var Material = require('./models/Material.js');
 
 
 //========CONTROLLERS==========
