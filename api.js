@@ -61,9 +61,10 @@ exports.bootstrap = function() {
 }
 
 exports.restart = function() {
+  Material.remove({},function(){});
+  ChannelUser.remove({},function(){});
   Channel.remove({},function(){});
   User.remove({},function(){});
-  ChannelUser.remove({},function(){});
 }
 
 //==============POLICIES===============
