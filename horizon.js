@@ -20,7 +20,7 @@ module.exports = function (port,configure) {
   if(typeof port === 'undefined' || ! port)
     port = 9999;
   app.listen(port);
-  console.log('listening in port '+port);
+  console.log('Horizon is listening in port '+port);
 }
 
 var Horizon = {

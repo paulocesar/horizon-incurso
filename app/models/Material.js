@@ -1,5 +1,5 @@
 var model = Schema({
-  _id :  ObjectId,
+  _id : ObjectId,
   name: String,
   files: [{path: String}],
   _channel : {type: ObjectId, ref: 'Channel'},
