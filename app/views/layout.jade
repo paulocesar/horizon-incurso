@@ -25,7 +25,7 @@ html
               ul.nav(style='float:right')
                 -if(session_user)
                   li
-                    a(href='/search') !{__('Home')}
+                    a(href='/channel/index') !{__('Home')}
                   -if(session_user.role == 1)
                     li(style)
                       a(href='/user/index') !{__('Users')}

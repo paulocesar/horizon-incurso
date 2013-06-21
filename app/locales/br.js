@@ -1,4 +1,4 @@
-exports.module = {
+module.exports = {
   'name' : 'nome',
   'Name' : 'Nome',
   'email' : 'email',

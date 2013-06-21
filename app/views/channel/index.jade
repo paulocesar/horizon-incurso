@@ -48,7 +48,7 @@ block content
       ul.thumbnails
         li.span12
           -for channel, key in channels
-            a.thumbnail.well(href='/channel?channel='+channel._id)
+            a.thumbnail.well(href='/channel/view?channel='+channel._id)
               h4 !{channel.name}
               -if(channel.description.length > 131)
                 p !{channel.description.substring(0,131)+'...'}

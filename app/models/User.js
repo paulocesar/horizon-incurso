@@ -21,3 +21,4 @@ model.path('password').required(true);
 model.path('role').required(true);
 
 module.exports = mongoose.model('User', model);
+
