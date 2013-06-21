@@ -1,8 +1,5 @@
-var mongoose = require('mongoose')
-   ,Schema = mongoose.Schema;
-
 var model = Schema({
-  _id : Schema.Types.ObjectId,
+  _id : ObjectId,
   name: String,
   email: {type: String, unique: true},
   description: String,
@@ -20,5 +17,5 @@ model.path('name').required(true);
 model.path('password').required(true);
 model.path('role').required(true);
 
-module.exports = mongoose.model('User', model);
+module.exports = model;
 

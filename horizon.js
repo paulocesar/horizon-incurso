@@ -1,4 +1,7 @@
 var fs = require('fs');
+var mongoose = require('mongoose');
+global['Schema'] = mongoose.Schema;
+global['ObjectId'] = mongoose.Schema.Types.ObjectId;
 
 global['Utils'] = require('./app/utils.js');
 
@@ -49,7 +52,7 @@ var Horizon = {
 
       if(typeof configure == 'function')
         app.use(configure);
-      if(typeof configure == 'array')
+      if(configure instanceof Array)
         for(var i in configure)
           app.use(configure[i]);
 
@@ -75,7 +78,7 @@ var Horizon = {
       if(models[i].match(/(.*)[.]js/)) {
         name = models[i].match(/(.*)[.]js/)[1];
         Horizon.h_models.push(name);
-        global[name] = require(Horizon.ROOT+'models/'+name+'.js');
+        global[name] = mongoose.model(name, require(Horizon.ROOT+'models/'+name+'.js'));
       }
     }
   },
