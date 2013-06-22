@@ -1,26 +1,36 @@
 var fs = require('fs');
 
+//============COMMAND=LINE=============
 
 if(typeof process.argv[2] != 'undefined' && typeof process.argv[3] != 'undefined') {
-  console.log('feature not done... =/');
-  return;
+  // console.log('feature not done... =/');
+  // return;
 
   String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
   }
 
-  if(process.argv[2] == 'controller') {
-    name = process.argv[3].capitalize();
-    // console.log('generating controller ' + name + ' ...');
-    // fs.createReadStream('./templates/controller.js').pipe(fs.createWriteStream('./controller/'+name+'Controller.js'));
-    return;
+  function copy(src,dst) {
+    is = fs.createReadStream(src);
+    os = fs.createWriteStream(dst,{flags: 'w'});
+    is.pipe(os);
   }
-  if(process.argv[2] == 'model') {
+
+  if(process.argv[2] == 'controller' || process.argv[2] == 'generate' ) {
     name = process.argv[3].capitalize();
-    // console.log('generating model ' + name + ' ...');
-    // fs.createReadStream('./templates/model.js').pipe(fs.createWriteStream('./models/'+name+'.js'));
-    return;
+    console.log('generating controller ' + name + ' ...');
+    src = 'app/templates/controller.js';
+    dst = 'app/controllers/'+name+'Controller.js';
+    copy(src,dst);
   }
+  if(process.argv[2] == 'model' || process.argv[2] == 'generate') {
+    name = process.argv[3].capitalize();
+    console.log('generating model ' + name + ' ...');
+    src = 'app/templates/model.js';
+    dst = 'app/models/'+name+'.js';
+    copy(src,dst);
+  }
+  return;
 }
 
 //=========HELPERS=============
@@ -35,7 +45,10 @@ function isEmpty(obj) {
     return true;
 }
 
-//=============================
+
+//============HORIZON=FRAMEWORK=================
+
+
 var mongoose = require('mongoose');
 global['Schema'] = mongoose.Schema;
 global['ObjectId'] = mongoose.Schema.Types.ObjectId;
@@ -61,9 +74,11 @@ module.exports = function (configuration) {
   }
 
   port = set_conf(9999,configuration.port);
-  configuration = set_conf(null,configuration.configure);
+  config = set_conf(null,configuration.configure);
+  language = set_conf('en',configuration.language);
 
-  Horizon.bootstrap(app,configuration);
+  Horizon.set_language(language);
+  Horizon.bootstrap(app,config);
 
   app.listen(port);
   console.log('Horizon is listening in port '+port);
@@ -76,7 +91,7 @@ var Horizon = {
   h_policies_rules : require('./app/policy.js'),
   h_routes : require('./app/route.js'),
   h_controllers : {},
-  h_i18n : require('./app/locales/br.js'),
+  h_i18n : null,
   h_controller_template : {
     index : function (req, res) {
       model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
@@ -206,6 +221,10 @@ var Horizon = {
     }
 
 
+  },
+
+  set_language : function (lang) {
+    Horizon.h_i18n = require('./app/locales/'+lang+'.js');
   },
   
   bootstrap : function (app,configure) {
