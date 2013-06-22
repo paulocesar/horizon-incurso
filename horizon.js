@@ -28,6 +28,7 @@ var Horizon = {
   h_models : [],
   h_policies : {},
   h_policies_rules : require('./app/policy.js'),
+  h_routes : require('./app/route.js'),
   h_controllers : {},
   h_i18n : require('./app/locales/br.js'),
   
@@ -70,6 +71,7 @@ var Horizon = {
     Horizon.create_models();
     Horizon.create_policies();
     Horizon.create_controllers(app);
+    Horizon.create_routes();
   },
 
   create_models : function () {
@@ -121,6 +123,13 @@ var Horizon = {
     }
   },
 
+  create_routes : function (req, res, next) {
+    for(var i in Horizon.h_routes) {
+      app.get(i, function (reqi, resi) { resi.redirect(Horizon.h_routes[i]); } );
+      app.post(i, function (reqi, resi) { resi.redirect(Horizon.h_routes[i]); } );
+    }
+  },
+
   method_check : function (req, res, next) {
     req.isPost = function () {
       if(this.method == 'POST') return true;
@@ -152,7 +161,7 @@ var Horizon = {
     next();
   },
 
-  flash : function(req, res, next) {
+  flash : function (req, res, next) {
     var session = req.session;
     var messages = session.messages || (session.messages = []);
 
@@ -161,8 +170,7 @@ var Horizon = {
     }
     res.locals.messages = req.session.messages;
     next()
-  },
-
+  }
 
 }
 
