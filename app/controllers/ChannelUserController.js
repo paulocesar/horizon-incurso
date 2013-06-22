@@ -1,5 +1,11 @@
 module.exports = {
 
+  index : function(req,res) { res.redirect('/'); },
+  view : function(req,res) { res.redirect('/'); },
+  create : function(req,res) { res.redirect('/'); },
+  edit : function(req,res) { res.redirect('/'); },
+  delete : function(req,res) { res.redirect('/'); },
+
   invite : function(req,res) {
     if(!req.isPost()) {
       res.redirect('/channel/view?channel='+req.session.channel._id);

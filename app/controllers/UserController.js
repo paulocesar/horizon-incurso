@@ -5,6 +5,8 @@ module.exports = {
     });
   },
 
+  view : function (req, res) { res.redirect('/user/index'); },
+
   create : function(req,res){
     if(!req.isPost()) {
       res.redirect('/user/index');

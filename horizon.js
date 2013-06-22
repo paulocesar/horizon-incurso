@@ -1,4 +1,41 @@
 var fs = require('fs');
+
+
+if(typeof process.argv[2] != 'undefined' && typeof process.argv[3] != 'undefined') {
+  console.log('feature not done... =/');
+  return;
+
+  String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
+
+  if(process.argv[2] == 'controller') {
+    name = process.argv[3].capitalize();
+    // console.log('generating controller ' + name + ' ...');
+    // fs.createReadStream('./templates/controller.js').pipe(fs.createWriteStream('./controller/'+name+'Controller.js'));
+    return;
+  }
+  if(process.argv[2] == 'model') {
+    name = process.argv[3].capitalize();
+    // console.log('generating model ' + name + ' ...');
+    // fs.createReadStream('./templates/model.js').pipe(fs.createWriteStream('./models/'+name+'.js'));
+    return;
+  }
+}
+
+//=========HELPERS=============
+
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}
+
+//=============================
 var mongoose = require('mongoose');
 global['Schema'] = mongoose.Schema;
 global['ObjectId'] = mongoose.Schema.Types.ObjectId;
@@ -15,10 +52,19 @@ mongoose.connection.on('error',function(err){
   process.exit();
 });
 
-module.exports = function (port,configure) {
-  Horizon.bootstrap(app,configure);
-  if(typeof port === 'undefined' || ! port)
-    port = 9999;
+module.exports = function (configuration) {
+
+  function set_conf(deft,param) {
+    if (typeof param !== 'undefined')
+      return param;
+    return deft;
+  }
+
+  port = set_conf(9999,configuration.port);
+  configuration = set_conf(null,configuration.configure);
+
+  Horizon.bootstrap(app,configuration);
+
   app.listen(port);
   console.log('Horizon is listening in port '+port);
 }
@@ -31,11 +77,141 @@ var Horizon = {
   h_routes : require('./app/route.js'),
   h_controllers : {},
   h_i18n : require('./app/locales/br.js'),
+  h_controller_template : {
+    index : function (req, res) {
+      model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
+      
+      if(typeof global[model_name] === 'undefined') {
+        res.send('undefined');
+        return;
+      }
+      
+      query = {};
+      if(!isEmpty(req.query))
+        query = req.query;
+      else if(!isEmpty(req.body))
+        query = req.body;
+      
+      global[model_name].find(query).exec(function(err,model){
+        if(err)
+          res.json(err);
+        else
+          res.json(model);
+      });
+    },
+
+    view : function (req, res) {
+      model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
+      
+      if(typeof global[model_name] === 'undefined') {
+        res.send('undefined');
+        return;
+      }
+      
+      query = {};
+      if(!isEmpty(req.query))
+        query = req.query;
+      else if(!isEmpty(req.body))
+        query = req.body;
+      
+      global[model_name].findOne(query).exec(function(err,model){
+        if(err)
+          res.json(err);
+        else
+          res.json(model);
+      });
+    },
+
+    create : function (req, res) {
+      model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
+      
+      if(typeof global[model_name] === 'undefined') {
+        res.send('undefined');
+        return;
+      }
+      
+      query = {};
+      if(!isEmpty(req.query))
+        query = req.query;
+      else if(!isEmpty(req.body))
+        query = req.body;
+      
+      global[model_name](query).save(function (err){
+        if(err)
+          res.json(err);
+        else
+          global[model_name].find(query).exec(function (err2, model){
+            if(err2)
+              res.json(err2);
+            else
+              res.json(model);
+          });
+      });
+
+    },
+
+    delete : function (req, res) {
+      model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
+      if(typeof global[model_name] === 'undefined') {
+        res.send('undefined');
+        return;
+      }
+      query = {};
+      if(!isEmpty(req.query))
+        query = req.query;
+      else if(!isEmpty(req.body))
+        query = req.body;
+
+      global[model_name].find(query).exec(function (err, model){
+        if(err)
+          res.json(err);
+        else
+          global[model_name].remove(query).exec(function (err2){
+            if(err2)
+              res.json(err2)
+            else
+              res.json(model);
+          });
+      });
+    },
+
+    edit : function (req, res) {
+      model_name = Horizon.convert_path_to_model(req.url.split('/')[1]);
+      
+      if(typeof global[model_name] === 'undefined') {
+        res.send('undefined');
+        return;
+      }
+      
+      data = {};
+      if(!isEmpty(req.query))
+        data = req.query;
+
+      query = {};
+      if(!isEmpty(req.body))
+        query = req.body;
+
+      global[model_name].update(query,{$set:data},{multi:true},function(err,numAffected){
+        if(err)
+          res.json(err);
+        else
+          global[model_name].find(query).exec(function(err2,models){
+            if(err2)
+              res.json(err2);
+            else
+              res.json(models);
+          });
+      });
+
+    }
+
+
+  },
   
   bootstrap : function (app,configure) {
 
     app.configure(function(){
-      // console.log(__dirname);
+
       app.set('views',__dirname + '/app/views');
       app.set('view engine', 'jade');
       app.use(express.static(__dirname + '/app/public'));
@@ -72,6 +248,7 @@ var Horizon = {
     Horizon.create_policies();
     Horizon.create_controllers(app);
     Horizon.create_routes();
+    Horizon.create_page_not_found();
   },
 
   create_models : function () {
@@ -99,27 +276,50 @@ var Horizon = {
     controllers = fs.readdirSync(Horizon.ROOT+'controllers');
     for(var i in controllers) {
       if(controllers[i].match(/(.*)Controller.js/)) {
-        name = controllers[i].match(/(.*)Controller.js/)[1].toLowerCase();
-        Horizon.h_controllers[name] = require(Horizon.ROOT+'controllers/'+controllers[i]);
-        for(var method in Horizon.h_controllers[name]) {
-          nameController = controllers[i].match(/(.*).js/)[1];
+        
+        name = Horizon.convert_controller_to_path( controllers[i].match(/(.*)Controller.js/)[1] );//.toLowerCase();
 
-          if(typeof Horizon.h_policies_rules[nameController] !== 'undefined') {
-            policy_name = Horizon.h_policies_rules[nameController][method];
-          // console.log(policy_name);
-            if(typeof policy_name !== 'undefined') {
-              app.get('/'+name+'/'+method, Horizon.h_policies[policy_name], Horizon.h_controllers[name][method]);
-              app.post('/'+name+'/'+method, Horizon.h_policies[policy_name], Horizon.h_controllers[name][method]);
-            } else {
-              app.get('/'+name+'/'+method, Horizon.h_controllers[name][method]);
-              app.post('/'+name+'/'+method, Horizon.h_controllers[name][method]);
-            }
-          } else {
-            app.get('/'+name+'/'+method, Horizon.h_controllers[name][method]);
-            app.post('/'+name+'/'+method, Horizon.h_controllers[name][method]);
-          }
+        nameController = controllers[i].match(/(.*).js/)[1];
+        Horizon.h_controllers[name] = require(Horizon.ROOT+'controllers/'+controllers[i]);
+
+        for(var method in Horizon.h_controllers[name]) {
+          Horizon.create_controller_route(
+            name,
+            method,
+            nameController,
+            Horizon.h_controllers[name][method]
+          );
+        }
+        
+        for(var method in Horizon.h_controller_template) {
+          if(typeof Horizon.h_controllers[name][method] === 'undefined')
+            Horizon.create_controller_route(
+              name,
+              method,
+              nameController,
+              Horizon.h_controller_template[method]
+            );
         }
       }
+
+    }
+
+  },
+
+  create_controller_route : function (controller, method, nameController, callback) {
+    if(typeof Horizon.h_policies_rules[nameController] !== 'undefined') {
+      policy_name = Horizon.h_policies_rules[nameController][method];
+    // console.log(policy_name);
+      if(typeof policy_name !== 'undefined') {
+        app.get('/'+controller+'/'+method, Horizon.h_policies[policy_name], callback);
+        app.post('/'+controller+'/'+method, Horizon.h_policies[policy_name], callback);
+      } else {
+        app.get('/'+controller+'/'+method, callback);
+        app.post('/'+controller+'/'+method, callback);
+      }
+    } else {
+      app.get('/'+controller+'/'+method, callback);
+      app.post('/'+controller+'/'+method, callback);
     }
   },
 
@@ -128,6 +328,38 @@ var Horizon = {
       app.get(i, function (reqi, resi) { resi.redirect(Horizon.h_routes[i]); } );
       app.post(i, function (reqi, resi) { resi.redirect(Horizon.h_routes[i]); } );
     }
+  },
+
+  create_page_not_found : function () {
+    app.get('*', function(req, res){
+      res.render('404');
+    });
+    app.post('*', function(req, res){
+      res.render('404');
+    });
+  },
+
+  convert_controller_to_path : function (str) {
+    var str_new = str[0].toLowerCase();
+    for(var i = 1; i < str.length; i++) {
+      if(str[i] == str[i].toUpperCase())
+        str_new += '_';
+      str_new += str[i].toLowerCase();
+    }
+    return str_new;
+  },
+
+  convert_path_to_model : function (str) {
+    var str_new = str[0].toUpperCase();
+    for(var i = 1; i < str.length; i++) {
+      if(str[i] == '_') {
+        i += 1;
+        if(typeof str[i] !== 'undefined')
+        str_new += str[i].toUpperCase();
+      } else
+        str_new += str[i].toLowerCase();
+    }
+    return str_new;
   },
 
   method_check : function (req, res, next) {
@@ -170,7 +402,7 @@ var Horizon = {
     }
     res.locals.messages = req.session.messages;
     next()
-  }
+  },
 
 }
 
