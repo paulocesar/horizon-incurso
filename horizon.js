@@ -80,6 +80,9 @@ module.exports = function (configuration) {
   Horizon.set_language(language);
   Horizon.bootstrap(app,config);
 
+  bootstrap = set_conf(function(){},configuration.bootstrap);
+  bootstrap();
+
   app.listen(port);
   console.log('Horizon is listening in port '+port);
 }

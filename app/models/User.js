@@ -5,7 +5,7 @@ var model = Schema({
   description: String,
   image: String,
   password: String,
-  reputation: Number,
+  reputation: {type:Number,default:0},
   confirmed: {type:Number,min:0,max:1,default:1},
   active: {type:Number,min:0,max:1,default:1},
   role: {type:Number,min:1,max:3}, //Administrator, Manager or User
