@@ -5,16 +5,14 @@ module.exports = {
     fs.readFile(req.files.file1.path, function (err, data) {
       filename = Utils.dateToFilename()+'-'+req.files.file1.name;
       var newPath = "./app/uploads/"+filename;
-      console.log(newPath);
-      console.log(data);
       fs.writeFile(newPath, data, function (err) {
-        if(err) {
-          console.log(err);
-          req.flash('error','Arquivo não encontrado');
+        if(err) { 
+          req.flash('error','Arquivos não encontrado');
           res.redirect('/channel/view?channel='+req.session.channel._id);
         } else {
           Material({
             name: req.body.name,
+            description: req.body.description,
             files: [{path:filename}],
             _channel: req.session.channel._id
           })

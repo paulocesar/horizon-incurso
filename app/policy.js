@@ -20,8 +20,8 @@ module.exports = {
   },
 
   ChannelUserController : {
-    invite : 'auth_manager',
-    uninvite : 'auth_manager'
+    invite : 'auth_channel_edit',
+    uninvite : 'auth_channel_edit'
   },
 
   MaterialController : {

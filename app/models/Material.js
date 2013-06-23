@@ -1,6 +1,7 @@
 var model = Schema({
   _id : ObjectId,
   name: String,
+  description: String,
   files: [{path: String}],
   _channel : {type: ObjectId, ref: 'Channel'},
 });

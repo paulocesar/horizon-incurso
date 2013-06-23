@@ -12,7 +12,7 @@ module.exports = {
       return;
     }
 
-    User.find({email:req.body.email},function(err,user){
+    User.findOne({email:req.body.email},function(err,user){
       if(err) {
         req.flash('error','Houve um erro no banco!');
         res.redirect('/channel/view?channel='+req.session.channel._id);
@@ -21,7 +21,7 @@ module.exports = {
         res.redirect('/channel/view?channel='+req.session.channel._id);
       } else {
 
-        ChannelUser.find({_channel:req.session.channel._id,_user:user._id}).exec(function(err,channelUser){
+        ChannelUser.findOne({_channel:req.session.channel._id,_user:user._id}).exec(function(err,channelUser){
           if(err) {
             req.flash('error','Houve um erro no banco!');
             res.redirect('/channel?channel='+req.session.channel._id);
@@ -32,10 +32,12 @@ module.exports = {
               ChannelUser({
                 _channel: req.session.channel._id,
                 _user: user._id,
-                level: req.body.level
+                level: 1
               }).save(function(err){
                 if(err)
                   req.flash('error','Houve um erro no banco!');
+                else
+                  req.flash('success','Usuário convidado');
                 res.redirect('/channel/view?channel='+req.session.channel._id);
               });
           }
@@ -51,9 +53,11 @@ module.exports = {
       return;
     }
     //remove user from channel and channel from user
-    ChannelUser.remove({_channel:req.session.channel._id,_user:req.body.user},function(err,channelUser){
+    ChannelUser.remove({_id:req.query.id},function(err,channelUser){
       if(err)
         req.flash('error','Houve um erro no banco!');
+      else
+        req.flash('success','Usuário desconvidado');
       res.redirect('/channel/view?channel='+req.session.channel._id);
     });
   }

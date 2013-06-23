@@ -45,7 +45,22 @@ module.exports = {
 
   view : function(req,res) {
     Channel.findOne({_id:req.session.channel._id}).populate('_owner','name email image').exec(function(err,channel){
-      res.render('channel/view',{chan:channel});
+      Material.find({_channel:channel._id}).exec(function (err,mats){
+        if(err)
+          req.flash('Não foi possível encontrar materiais');
+        
+        if(req.session.user.role == 1 || req.session.user.role == 2) {
+          ChannelUser.find({_channel:req.session.channel._id})
+          .populate('_user','email name')
+          .exec(function (err2,chanUsers){
+            if(err2)
+              req.flash('Não possível achar alunos');
+            res.render('channel/view',{chan:channel,channel_user:chanUsers,materials:mats});
+          });
+        } else {
+          res.render('channel/view',{chan:channel,channel_user:null,materials:mats});
+        }
+      });
     });
   },
 
