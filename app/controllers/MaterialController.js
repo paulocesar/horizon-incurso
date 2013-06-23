@@ -10,7 +10,7 @@ module.exports = {
       fs.writeFile(newPath, data, function (err) {
         if(err) {
           console.log(err);
-          req.flash('error','No file found');
+          req.flash('error','Arquivo não encontrado');
           res.redirect('/channel/view?channel='+req.session.channel._id);
         } else {
           Material({
@@ -20,7 +20,9 @@ module.exports = {
           })
           .save(function (err2) {
             if(err2)
-              req.flash('error','Error on material data');
+              req.flash('error','Existem campos inválidos');
+            else
+              req.flash('success','Material criado');
             res.redirect('/channel/view?channel='+req.session.channel._id);
           });
         }
