@@ -15,7 +15,7 @@ module.exports = {
     index : 'auth',
     view : 'auth_channel_view',
     create : 'auth_manager',
-    edit : 'auth_manager',
+    edit : 'auth_channel_edit',
     delete : 'auth_channel_delete'
   },
 
@@ -26,7 +26,8 @@ module.exports = {
 
   MaterialController : {
     index : 'auth_channel_view',
-    view : 'auth_channel_view',
+    view : 'auth_channel_edit',
+    add_file : 'auth_channel_edit',
     create : 'auth_channel_edit',
     edit : 'auth_channel_edit',
     delete : 'auth_channel_delete',

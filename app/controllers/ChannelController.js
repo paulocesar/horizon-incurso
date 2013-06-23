@@ -101,12 +101,11 @@ module.exports = {
     channel = req.session.channel;
     data = {
       name: req.body.name,
-      description: req.body.description
+      description: req.body.description,
     };
     if(req.session.user.role == 1)
       data.active = req.body.active;
-    
-    Channel.update({_id:req.session.channel},{$set:data},{multi:true}
+    Channel.update({_id:req.session.channel._id},{$set:data},{multi:true}
       ,function(err,numAffected){
         if(err)
           req.flash('error','Ouve uma falha no banco');

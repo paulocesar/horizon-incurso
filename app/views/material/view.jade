@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  br
+  .row-fluid
+    .span3.well
+      ul.nav.nav-list
+        li
+          a.btn.btn-align-left(href='/channel/view?channel='+material._channel)
+            i.icon-chevron-left.btn-align-left
+            !{" "+__("Back")}
+        li.divider
+      h4 !{__('Add File')}
+      form.form-inline(enctype="multipart/form-data",method='post',action='/material/add_file?channel='+material._channel+'&id='+material._id)
+        input.input(type='file',name='file1',placeholder=__('File'))
+        button.btn !{__('Save')}
+    .span6
+      -for(var i = 0; i < material.files.length; i++)
+        a(href='#')
+          div.well
+            p !{material.files[i].name + ' - ' + material.files[i].path}
+              a(href='#',style='float:right')
+                i.icon-remove.uninvite

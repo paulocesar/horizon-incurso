@@ -5,6 +5,10 @@ block content
   .row-fluid
     .span3.well
       ul.nav.nav-list
+        li
+          a.btn.btn-align-left(href='/channel/index')
+            i.icon-chevron-left.btn-align-left
+            !{" "+__("Back")}
         -if(session_user.role == 1 || session_user._id == chan._owner._id)
           li
             a.btn.btn-align-left.horizon_menu_index(href='#1')
@@ -54,7 +58,7 @@ block content
             input.input(type='text',name='name',placeholder=__('Name'))
             input.input(type='text',name='description',placeholder=__('Description'))
             input.input(type='file',name='file1',placeholder=__('File'))
-            button.btn !{__('Enter')}
+            button.btn !{__('Save')}
         #3.horizon_menu_item.well
           form.form-inline(action='/channel_user/invite?channel='+chan._id,method='post')
             h4 !{__('Invite User')}
@@ -72,10 +76,20 @@ block content
                   a(href='/channel_user/uninvite?channel='+chan._id+'&id='+channel_user[i]._id,style='float:right')
                     i.icon-remove.uninvite
         #5.horizon_menu_item.well
-          p Hello 5
+          form.form-inline(action='/channel/edit?channel='+chan._id,method='post')
+            h4 !{__('Edit Channel')}
+            input.input(type='text',name='name',placeholder=__('Name'),value=chan.name)
+            input.input(type='text',name='description',placeholder=__('Description'),value=chan.description)
+            -if(session_user.role == 1) 
+              select(name='active')
+                option(value=1,selected=(chan.active==1)) !{__('activated')}
+                option(value=0,selected=(chan.active==0)) !{__('deactivated')}
+              br
+              br
+            button.btn !{__('Save')}
       h3 !{__('Material')}
       -for(var i in materials)
-        a.thumbnail.well(href='/material/view?channel='+chan._id+'&material='+materials[i]._id)
+        a.thumbnail.well(href='/material/view?channel='+chan._id+'&id='+materials[i]._id)
           h4 !{materials[i].name}
           p !{materials[i].description}
           
