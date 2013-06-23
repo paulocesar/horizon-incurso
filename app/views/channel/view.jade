@@ -48,12 +48,13 @@ block content
             input.input(type='text',placeholder=__('Name'))
             button.btn !{__('Enter')}
         #2.horizon_menu_item.well
-          form.form-inline
+          form.form-inline(action='/material/create?channel='+chan._id,method='post',enctype="multipart/form-data")
             h4 !{__('Add Material')}
             p
               i.icon-info-sign
               !{' '+__('A Material is used to group archives (pdf, powerpoint, videos, etc)')}
-            input.input(type='text',placeholder=__('Name'))
+            input.input(type='text',name='name',placeholder=__('Name'))
+            input.input(type='file',name='file1',placeholder=__('File'))
             button.btn !{__('Enter')}
         #3.horizon_menu_item.well
           form.form-inline

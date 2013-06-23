@@ -22,6 +22,14 @@ module.exports = {
   ChannelUserController : {
     invite : 'auth_manager',
     uninvite : 'auth_manager'
+  },
+
+  MaterialController : {
+    index : 'auth_channel_view',
+    view : 'auth_channel_view',
+    create : 'auth_channel_edit',
+    edit : 'auth_channel_edit',
+    delete : 'auth_channel_delete',
   }
 
 };

@@ -35,4 +35,5 @@ module.exports = {
   'Invite User' : 'Convidar Usuário',
   'Add Material' : 'Adicionar Material',
   'A Material is used to group archives (pdf, powerpoint, videos, etc)' : 'Um Material serve para agrupar um ou mais arquivos (pdf, powerpoint, video, etc)',
+  'File' : 'Arquivo',
 }

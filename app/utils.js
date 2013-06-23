@@ -12,3 +12,7 @@ exports.getChannel = function(req) {
     return req.body.channel;
   return null;
 }
+
+exports.dateToFilename = function () {
+  return new Date().toISOString().replace(/T/, '-').replace(/\..+/, '').replace(/:/g,'-');
+}
