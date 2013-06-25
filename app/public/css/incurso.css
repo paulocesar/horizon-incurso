@@ -35,6 +35,10 @@ a.thumbnail {
   text-decoration: none;
 }
 
+div.horizon_menu_item {
+  display: none;
+}
+
 p.uninvite {
   padding:5px;
   width:98%;

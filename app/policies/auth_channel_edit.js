@@ -19,7 +19,7 @@ module.exports = function(req,res,ok) {
       if(req.session.user.role == 1)
         can_access = true;
       //if Manager
-      if(req.session.role == 2 && channel._owner == req.session.user.id)
+      if(req.session.role == 2 && channel._owner == req.session.user._id)
         can_access = true;
 
       if(can_access) {
@@ -30,7 +30,7 @@ module.exports = function(req,res,ok) {
 
       //if User can Edit
       ChannelUser
-      .findOne({_channel:channel.id,_user:req.session.user.id,level:2})
+      .findOne({_channel:channel._id,_user:req.session.user._id,level:2})
       .exec(function(err,channelUser) {
         if(err) {
           req.flash('error','Houve um erro na busca!');

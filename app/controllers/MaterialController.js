@@ -66,11 +66,20 @@ module.exports = {
             _channel: req.session.channel._id
           })
           .save(function (err2) {
-            if(err2)
+            if(err2) {
               req.flash('error','Existem campos inválidos');
-            else
+              res.redirect('/channel/view?channel='+req.session.channel._id);
+            } else {
               req.flash('success','Material criado');
-            res.redirect('/channel/view?channel='+req.session.channel._id);
+              Material.findOne({name:req.body.name,description:req.body.description}).sort({_id:-1}).exec(function (err,mat){
+                if(err) {
+                  req.flash('error','Não foi possível encontrar o material');
+                  res.redirect('/channel/view?channel='+req.session.channel._id);
+                } else {
+                  res.redirect('/material/view?channel='+req.session.channel._id+'&id='+mat._id);
+                }
+              });
+            }
           });
         }
       });

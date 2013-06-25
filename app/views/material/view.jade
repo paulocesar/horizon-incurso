@@ -10,7 +10,17 @@ block content
             i.icon-chevron-left.btn-align-left
             !{" "+__("Back")}
         li.divider
-      h4 !{__('Add File')}
+        li
+          h4 
+            a(href='#')   
+              !{material.name}
+        li.divider
+        li
+          p !{material.description}
+        li.divider
+        li
+          h5 
+            !{__('Add File')}
       form.form-inline(enctype="multipart/form-data",method='post',action='/material/add_file?channel='+material._channel+'&id='+material._id)
         input.input(type='file',name='file1',placeholder=__('File'))
         button.btn !{__('Save')}

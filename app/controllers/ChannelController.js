@@ -28,7 +28,7 @@ module.exports = {
       .find({_user:req.session.user._id})
       .sort({_id:'desc'})
       .populate('_channel')
-      .populate('_channel._owner')
+      // .populate('_channel._owner')
       .exec(function(err,userChannels){
         if(err) {
           req.flash('error','Houve um erro ao buscar por canais');
@@ -37,7 +37,12 @@ module.exports = {
           req.flash('warning','Você ainda não tem canais cadastrados');
           res.render('channel/index',{channels:userChannels});
         } else {
+          console.log(req.session.user);
           console.log(userChannels);
+          channels = [];
+          for(var i in userChannels)
+            channels.push(userChannels[i]._channel);
+          res.render('channel/index',{channels:channels});
         }
       });
     }
