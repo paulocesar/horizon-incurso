@@ -49,11 +49,6 @@ block content
           li
             p !{chan._owner.name} !{'('+chan._owner.email+')'}
     .span6
-      div.visible
-        hr.title
-        h4 !{__('Conferences')}
-        table#rooms-list.visible
-          !{__('aguarde...')}
       -if(session_user.role == 1 || session_user._id == chan._owner._id)
         #1.horizon_menu_item.well.visible
           h4 !{__('Start Live Conference')}
