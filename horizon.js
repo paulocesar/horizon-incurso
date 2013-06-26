@@ -56,7 +56,14 @@ global['ObjectId'] = mongoose.Schema.Types.ObjectId;
 global['Utils'] = require('./app/utils.js');
 
 var express = require('express');
-var app = module.exports = express();
+var app = module.exports = express(),
+server = require('http').createServer(app);
+global['io'] = require('socket.io').listen(server, { log: false});
+
+
+/* -------------- <socket.io> -------------- */
+
+
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/express-incurso');
@@ -83,7 +90,8 @@ module.exports = function (configuration) {
   bootstrap = set_conf(function(){},configuration.bootstrap);
   bootstrap();
 
-  app.listen(port);
+  // app.listen(port);
+  server.listen(port);
   console.log('Horizon is listening in port '+port);
 }
 

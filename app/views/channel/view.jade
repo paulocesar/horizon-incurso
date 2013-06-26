@@ -1,6 +1,12 @@
 extends ../layout
 
 block content
+  div#conference_window(style=('display:none'))
+    hr
+    h4 !{__('Conference')}
+    .row-fluid
+      .span4
+        #participants
   .row-fluid
     .span3
       hr.title
@@ -49,11 +55,18 @@ block content
           li
             p !{chan._owner.name} !{'('+chan._owner.email+')'}
     .span6
+      div
+        hr
+        h4 !{__('Conference')}
+        input#conference-room.input(type='hidden',value='private-'+chan._id)
+        p
+          i.icon-info-sign
+          | !{' '+__('If exists any online conference now, It will be listed bellow.')}
+        table#rooms-list.table
       -if(session_user.role == 1 || session_user._id == chan._owner._id)
         #1.horizon_menu_item.well.visible
           h4 !{__('Start Live Conference')}
           //- form.form-inline
-          input#conference-room.input(type='hidden',value='private-'+chan._id)
           input#conference-name.input(type='text',placeholder=__('Name'))
           button#start-conferencing.btn !{__('Enter')}
         #2.horizon_menu_item.well
@@ -129,6 +142,10 @@ block content
 
 block script
   script(src='/js/horizon-menu.js')
+  script(src='/js/socket.io.js')
+  script(src='/js/RTCPeerConnection-v1.5.js')
+  script(src='/js/conference.js')
+  script(src='/js/conference-ui.js')
   script.
     (function($) {
       $('div.horizon_menu_item').hide();

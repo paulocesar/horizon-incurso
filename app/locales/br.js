@@ -49,5 +49,6 @@ module.exports = {
   'Upload File' : 'Adicionar Arquivo',
   'This Material will be completely removed! Proceed anyway?' : 'Este Material vai ser totalmente removido! Deseja Proceguir?',
   'This Channel will be completely removed! Proceed anyway?' : 'Este Canal vai ser totalmente removido! Deseja Proceguir?',
+  'If exists any online conference now, It will be listed bellow.' : 'Se Houver qualquer conferência online agora, ela será listada abaixo.'
 
 }
