@@ -16,10 +16,10 @@ html
                 span(style="text-decoration:bold") curso
             .span5
               -if(session_user)
-                div.form-search(style='margin-top:5px;margin-bottom:0px')
+                form.form-search(action='/channel/index',method='post',style='margin-top:5px;margin-bottom:0px')
                   .input-append
-                    input.span4.search-query(style='width:100%')
-                    a.btn.horizon(type='submit',href='#incurso_search',style='height:19px')
+                    input#incurso_query.span4.search-query(name='q',style='width:100%')
+                    button.btn(type='submit',href='#incurso_search',style='height:29px')
                       i.icon-search
             .span4
               ul.nav(style='float:right')
@@ -29,8 +29,8 @@ html
                   -if(session_user.role == 1)
                     li(style)
                       a(href='/user/index') !{__('Users')}
-                  li
-                    a(href='/#') !{__('Config')}
+                  //- li
+                  //-   a(href='/#') !{__('Config')}
                   li
                     a(href='/session/logout') !{__('Logout')}
                 -else

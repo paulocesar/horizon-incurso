@@ -266,6 +266,7 @@ var Horizon = {
       app.use(express.errorHandler());
     });
 
+
     Horizon.create_models();
     Horizon.create_policies();
     Horizon.create_controllers(app);

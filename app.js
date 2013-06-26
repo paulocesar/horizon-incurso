@@ -1,6 +1,19 @@
 require('./horizon.js')({
+  
   port: 1337,
+
+
   language: 'br',
+
+
+  configure: [
+    function (req, res, next) {
+      req.session.channel = null;
+      next();
+    },
+  ],
+
+
   bootstrap: function () {
     User.findOne({}).exec(function(err,user){
       if(!user)
@@ -12,11 +25,8 @@ require('./horizon.js')({
           role: 1,
         }).save(function(err){if(err) console.log(err);});
     });
+
   },
-  configure: [
-    function (req, res, next) {
-      req.session.channel = null;
-      next();
-    },
-  ]
+
+
 });

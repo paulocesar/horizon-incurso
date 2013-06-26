@@ -1,8 +1,15 @@
 module.exports = {
   index : function(req,res) {
+
+    conditions = {};
+    if(typeof req.body.q !== 'undefined') {
+      conditions['name'] = new RegExp('.*'+req.body.q+'.*','i');
+      conditions['description'] = new RegExp('.*'+req.body.q+'.*','i');
+      // console.log(conditions);
+    }
     //if Administrator
     if(req.session.user.role == 1) {
-      Channel.find({}).populate('_owner','name email')
+      Channel.find(conditions).populate('_owner','name email')
       .sort({_id:'desc'})
       .exec(function(err,channels){
         if(err)
@@ -12,8 +19,9 @@ module.exports = {
 
     //if Manager
     } else if(req.session.user.role == 2) {
+      conditions['_owner'] = req.session.user._id;
       Channel
-      .find({_owner:req.session.user._id})
+      .find(conditions)
       .sort({_id:'desc'})
       .populate('_owner','name email')
       .exec(function(err,channels){
@@ -27,7 +35,10 @@ module.exports = {
       ChannelUser
       .find({_user:req.session.user._id})
       .sort({_id:'desc'})
-      .populate('_channel')
+      .populate({
+        path: '_channel',
+        match: conditions,
+      })
       // .populate('_channel._owner')
       .exec(function(err,userChannels){
         if(err) {
@@ -37,8 +48,6 @@ module.exports = {
           req.flash('warning','Você ainda não tem canais cadastrados');
           res.render('channel/index',{channels:userChannels});
         } else {
-          console.log(req.session.user);
-          console.log(userChannels);
           channels = [];
           for(var i in userChannels)
             channels.push(userChannels[i]._channel);
@@ -50,7 +59,7 @@ module.exports = {
 
   view : function(req,res) {
     Channel.findOne({_id:req.session.channel._id}).populate('_owner','name email image').exec(function(err,channel){
-      Material.find({_channel:channel._id}).exec(function (err,mats){
+      Material.find({_channel:channel._id}).sort({_id:'ASC'}).exec(function (err,mats){
         if(err)
           req.flash('Não foi possível encontrar materiais');
         
@@ -115,17 +124,24 @@ module.exports = {
         if(err)
           req.flash('error','Ouve uma falha no banco');
         else if(numAffected > 0)
-          req.flash('success','Elemento removido com sucesso');
+          req.flash('success','Elemento atualizado com sucesso');
         res.redirect('/channel/view?channel='+req.session.channel._id);
       }
     );
   },
 
   delete : function(req,res) {
-    Channel.remove({_id:req.session.channel.id},function(err){
+    Material.remove({_channel:req.session.channel._id},function(err){
       if(err)
         req.flash('error','Houve um erro no banco!');
-      res.redirect('/channel/index');
+      else
+        Channel.remove({_id:req.session.channel._id},function(err){
+          if(err)
+            req.flash('error','Houve um erro no banco!');
+          else
+            req.flash('success','Canal removido com sucesso');
+          res.redirect('/channel/index');
+        });
     });
   },
 

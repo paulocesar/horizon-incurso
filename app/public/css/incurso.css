@@ -2,6 +2,14 @@ p {
   color: gray;
 }
 
+hr.title {
+  margin-bottom:0px;
+}
+
+h4 {
+  color: rgb(124, 124, 124);
+}
+
 form.form-inline {
   margin:0px;
 }
@@ -13,6 +21,13 @@ input.input-small {
 }
 input.input {
   height: 30px;
+  width: 100%;
+  margin: 5px;
+  margin-left:0px;
+  margin-top:10px;
+}
+textarea.input {
+  height: 90px;
   width: 100%;
   margin: 5px;
   margin-left:0px;
@@ -37,6 +52,7 @@ a.thumbnail {
 
 div.horizon_menu_item {
   display: none;
+  margin-top: 62px;
 }
 
 p.uninvite {
@@ -48,4 +64,12 @@ p.uninvite {
 i.uninvite {
   margin-top: 3px;
   margin-right: 3px;
+  float:right;
+}
+
+p.file {
+  margin:10px;
+  padding:10px;
+  width:90%;
+  border:solid 1px #DBDBDB;
 }

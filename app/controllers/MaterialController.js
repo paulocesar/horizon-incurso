@@ -1,8 +1,36 @@
 module.exports = {
 
   index : function(req,res) { res.redirect('/channel/view?channel='+req.session.channel._id); },
-  // edit : function(req,res) { res.redirect('/'); },
-  // delete : function(req,res) { res.redirect('/'); },
+  
+  //TODO 
+  delete_file : function (req, res) {
+
+  },
+  download : function (req, res) {
+
+  },
+
+  edit : function (req, res) {
+    if(!req.isPost()) {
+      req.redirect('/material/view?channel='+req.session.channel._id+'&id='+req.query.id);
+      return;
+    }
+
+    data = {
+      name: req.body.name,
+      description: req.body.description,
+    };
+
+    Material.update({_id:req.query.id},{$set:data},{multi:true}
+      ,function(err,numAffected){
+        if(err)
+          req.flash('error','Ouve uma falha no banco');
+        else if(numAffected > 0)
+          req.flash('success','Elemento atualizado com sucesso');
+        res.redirect('/material/view?channel='+req.session.channel._id+'&id='+req.query.id);
+      }
+    );
+  },
 
   view : function (req,res) {
     Material.findOne({_id:req.query.id}).exec(function (err,material){
@@ -18,7 +46,7 @@ module.exports = {
   add_file : function (req,res) {
     var fs = require('fs');
     fs.readFile(req.files.file1.path, function (err, data) {
-      filename = Utils.dateToFilename()+'-'+req.files.file1.name;
+      filename = Utils.dateToFilename()+'-'+req.files.file1.name.replace(/ /g,'');
       name_orig = req.files.file1.name;
       var newPath = "./app/uploads/"+filename;
       fs.writeFile(newPath, data, function (err) {
@@ -51,7 +79,7 @@ module.exports = {
   create : function (req, res) {
     var fs = require('fs');
     fs.readFile(req.files.file1.path, function (err, data) {
-      filename = Utils.dateToFilename()+'-'+req.files.file1.name;
+      filename = Utils.dateToFilename()+'-'+req.files.file1.name.replace(/ /g,'');
       name_orig = req.files.file1.name;
       var newPath = "./app/uploads/"+filename;
       fs.writeFile(newPath, data, function (err) {
@@ -83,6 +111,16 @@ module.exports = {
           });
         }
       });
+    });
+  },
+
+  delete : function(req,res) {
+    Channel.remove({_id:req.query.id},function(err){
+      if(err)
+        req.flash('error','Houve um erro no banco!');
+      else
+        req.flash('success','Material removido com sucesso');
+      res.redirect('/channel/view?channel='+req.session.channel._id);
     });
   },
 

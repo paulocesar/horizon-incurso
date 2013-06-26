@@ -17,7 +17,9 @@ module.exports = {
   'Add User' : 'Adicionar Usuário',
   'Config' : 'Configurações',
   'Institution' : 'Instituição',
+  'About Me' : 'Sobre Mim',
   'Channel' : 'Canal',
+  'Channels' : 'Canais',
   'Add Channel' : 'Adicionar Canal',
   'Description' : 'Descrição',
   'Save' : 'Salvar',
@@ -42,4 +44,10 @@ module.exports = {
   'deactivated' : 'desativado',
   'Add File' : 'Adicionar Arquivo',
   'Back' : 'Voltar',
+  'Remove' : 'Remover',
+  'Files' : 'Arquivos',
+  'Upload File' : 'Adicionar Arquivo',
+  'This Material will be completely removed! Proceed anyway?' : 'Este Material vai ser totalmente removido! Deseja Proceguir?',
+  'This Channel will be completely removed! Proceed anyway?' : 'Este Canal vai ser totalmente removido! Deseja Proceguir?',
+
 }

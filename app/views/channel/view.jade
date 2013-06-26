@@ -1,72 +1,84 @@
 extends ../layout
 
 block content
-  br
   .row-fluid
-    .span3.well
-      ul.nav.nav-list
-        li
-          a.btn.btn-align-left(href='/channel/index')
-            i.icon-chevron-left.btn-align-left
-            !{" "+__("Back")}
-        -if(session_user.role == 1 || session_user._id == chan._owner._id)
+    .span3
+      hr.title
+      h4 !{__('Channel')}
+      .well
+        ul.nav.nav-list
           li
-            a.btn.btn-align-left.horizon_menu_index(href='#1')
-              i.icon-play.btn-align-left
-              !{" "+__("Conference")}
+            a.btn.btn-align-left(href='/channel/index')
+              i.icon-chevron-left.btn-align-left
+              !{" "+__("Back")}
+          -if(session_user.role == 1 || session_user._id == chan._owner._id)
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#1')
+                i.icon-play.btn-align-left
+                !{" "+__("Conference")}
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#2')
+                i.icon-plus-sign.btn-align-left
+                !{" "+__("Material")}
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#3')
+                i.icon-eye-open.btn-align-left
+                !{" "+__("Invite")}
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#4')
+                i.icon-eye-close.btn-align-left
+                !{" "+__("Uninvite")}
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#5')
+                i.icon-edit.btn-align-left 
+                !{" "+__("Edit")}
+            li
+              a.btn.btn-align-left.horizon_menu_index(href='#6')
+                i.icon-remove-circle.btn-align-left 
+                !{" "+__("Remove")}
+          li.divider
           li
-            a.btn.btn-align-left.horizon_menu_index(href='#2')
-              i.icon-plus-sign.btn-align-left
-              !{" "+__("Material")}
+            h4
+              a(href='#') 
+               !{chan.name}
+          li.divider
           li
-            a.btn.btn-align-left.horizon_menu_index(href='#3')
-              i.icon-eye-open.btn-align-left
-              !{" "+__("Invite")}
+            p 
+              !{chan.description}
+          li.divider
           li
-            a.btn.btn-align-left.horizon_menu_index(href='#4')
-              i.icon-eye-close.btn-align-left
-              !{" "+__("Uninvite")}
-          li
-            a.btn.btn-align-left.horizon_menu_index(href='#5')
-              i.icon-edit.btn-align-left 
-              !{" "+__("Edit")}
-        li.divider
-        li
-          h4
-            a(href='#') 
-             !{chan.name}
-        li.divider
-        li
-          p 
-            !{chan.description}
-        li.divider
-        li
-          p !{chan._owner.name} !{'('+chan._owner.email+')'}
+            p !{chan._owner.name} !{'('+chan._owner.email+')'}
     .span6
+      div.visible
+        hr.title
+        h4 !{__('Conferences')}
+        table#rooms-list.visible
+          !{__('aguarde...')}
       -if(session_user.role == 1 || session_user._id == chan._owner._id)
-        #1.horizon_menu_item.well
-          form.form-inline
-            h4 !{__('Start Live Conference')}
-            input.input(type='text',placeholder=__('Name'))
-            button.btn !{__('Enter')}
+        #1.horizon_menu_item.well.visible
+          h4 !{__('Start Live Conference')}
+          //- form.form-inline
+          input#conference-room.input(type='hidden',value='private-'+chan._id)
+          input#conference-name.input(type='text',placeholder=__('Name'))
+          button#start-conferencing.btn !{__('Enter')}
         #2.horizon_menu_item.well
+          h4 !{__('Add Material')}
           form.form-inline(action='/material/create?channel='+chan._id,method='post',enctype="multipart/form-data")
-            h4 !{__('Add Material')}
             p
               i.icon-info-sign
               !{' '+__('A Material is used to group archives (pdf, powerpoint, videos, etc)')}
             input.input(type='text',name='name',placeholder=__('Name'))
-            input.input(type='text',name='description',placeholder=__('Description'))
+            textarea.input(name='description',placeholder=__('Description'))
             input.input(type='file',name='file1',placeholder=__('File'))
             button.btn !{__('Save')}
         #3.horizon_menu_item.well
+          h4 !{__('Invite User')}
           form.form-inline(action='/channel_user/invite?channel='+chan._id,method='post')
-            h4 !{__('Invite User')}
             input.input(type='text',name='email',placeholder=__('Email'))
             button.btn !{__('Invite')}
         #4.horizon_menu_item.well
+          h4 !{__('Uninvite User')}
           -if(channel_user)
-            h4 !{__('Uninvite User')}
             -if(channel_user.length <= 0)
               p (nenhum usuário)
             -else
@@ -76,10 +88,11 @@ block content
                   a(href='/channel_user/uninvite?channel='+chan._id+'&id='+channel_user[i]._id,style='float:right')
                     i.icon-remove.uninvite
         #5.horizon_menu_item.well
+          h4 !{__('Edit')}
           form.form-inline(action='/channel/edit?channel='+chan._id,method='post')
-            h4 !{__('Edit Channel')}
             input.input(type='text',name='name',placeholder=__('Name'),value=chan.name)
-            input.input(type='text',name='description',placeholder=__('Description'),value=chan.description)
+            textarea.input(name='description',placeholder=__('Description'))
+              !{chan.description}
             -if(session_user.role == 1) 
               select(name='active')
                 option(value=1,selected=(chan.active==1)) !{__('activated')}
@@ -87,11 +100,35 @@ block content
               br
               br
             button.btn !{__('Save')}
-      h3 !{__('Material')}
-      -for(var i in materials)
-        a.thumbnail.well(href='/material/view?channel='+chan._id+'&id='+materials[i]._id)
-          h4 !{materials[i].name}
-          p !{materials[i].description}
+        #6.horizon_menu_item.well
+          h4 !{__('Remove')}
+          .row-fluid
+            .span2
+              img(src='/img/alert.png')
+            .span8
+              p !{__('This Channel will be completely removed! Proceed anyway?')}
+              a.btn.btn-danger(href='/channel/delete?channel='+chan._id) !{__('Remove')}
+
+
+
+
+      hr.title
+      h4 !{__('Material')}
+      -if(session_user.role == 1 || chan._owner == session_user._id)
+        -for(var i in materials)
+          a.thumbnail.well(href='/material/view?channel='+chan._id+'&id='+materials[i]._id)
+            h4 !{materials[i].name}
+            p !{materials[i].description}
+      -else
+        -for(var i in materials)
+          div.thumbnail.well(href='/material/view?channel='+chan._id+'&id='+materials[i]._id)
+            h4 !{materials[i].name}
+            p !{materials[i].description}
+            -files = materials[i].files
+            -for(var j = 0; j < files.length; j++)
+                a(href='/material/download?channel='+chan._id+'&id='+materials[i]._id+'&path='+files[j].path)
+                  p.file !{files[j].name}
+                    i.icon-download-alt(style='float:right')
           
     .span3
 
@@ -100,5 +137,5 @@ block script
   script.
     (function($) {
       $('div.horizon_menu_item').hide();
-      HorizonMenu.init(['#1','#2','#3','#4','#5']);
+      HorizonMenu.init(['#1','#2','#3','#4','#5','#6']);
     })(jQuery);

@@ -1,28 +1,26 @@
 extends ../layout
 
 block content
-  br
   .row-fluid
-    .span3.well
-      ul.nav.nav-list
-        -if(session_user.role == 1 || session_user.role == 2)
-          li
-            a.btn.btn-add-channel
-              i.icon-plus-sign
-              !{' '+__('Channel')}
-        li.nav-header !{__('My Courses')}
-        li
-          a(href='#') Futuro link
-        li
-          a(href='#') Curso Exemplo
-        li.nav-header !{__('Areas')}
-        li
-          a(href='#') Matemática
-        li
-          a(href='#') Informática
+    .span3
+      hr.title
+      h4 !{__('Profile')}
+      .well
+        ul.nav.nav-list
+          -if(session_user.role == 1 || session_user.role == 2)
+            li
+              a.btn.btn-add-channel
+                i.icon-plus-sign
+                !{' '+__('Channel')}
+          li.nav-header !{__('About Me')}
+          li !{session_user.name}
+          li !{session_user.email}
+          li !{session_user.description}
     .span6
+      hr.title
+      h4 !{__('Channels')}
       -if(session_user.role == 1 || session_user.role == 2)
-        .form-add-channel
+        .form-add-channel(style='display:none')
           form.form-horizontal.thumbnail.well(method='post',action='/channel/create')
             .control-group
               .controls
@@ -48,13 +46,16 @@ block content
       ul.thumbnails
         li.span12
           -for channel, key in channels
-            a.thumbnail.well(href='/channel/view?channel='+channel._id)
-              h4 !{channel.name}
-              -if(channel.description.length > 131)
-                p !{channel.description.substring(0,131)+'...'}
-              -else
-                p !{channel.description}
-    .span3.thumbnail(style='height:400px')
+            -if(channel)
+              a.thumbnail.well(href='/channel/view?channel='+channel._id)
+                h4 !{channel.name}
+                -if(channel.description.length > 131)
+                  p !{channel.description.substring(0,131)+'...'}
+                -else
+                  p !{channel.description}
+    .span3
+      br
+      .thumbnail(style='height:400px')
 
 block script
   script(src='/js/incurso-channels.js')

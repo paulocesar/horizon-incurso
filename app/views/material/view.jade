@@ -1,33 +1,76 @@
 extends ../layout
 
 block content
-  br
   .row-fluid
-    .span3.well
-      ul.nav.nav-list
-        li
-          a.btn.btn-align-left(href='/channel/view?channel='+material._channel)
-            i.icon-chevron-left.btn-align-left
-            !{" "+__("Back")}
-        li.divider
-        li
-          h4 
-            a(href='#')   
-              !{material.name}
-        li.divider
-        li
-          p !{material.description}
-        li.divider
-        li
-          h5 
-            !{__('Add File')}
-      form.form-inline(enctype="multipart/form-data",method='post',action='/material/add_file?channel='+material._channel+'&id='+material._id)
-        input.input(type='file',name='file1',placeholder=__('File'))
-        button.btn !{__('Save')}
+    .span3
+      hr.title
+      h4 !{__('Material')}
+      .well
+        ul.nav.nav-list
+          li
+            a.btn.btn-align-left(href='/channel/view?channel='+material._channel)
+              i.icon-chevron-left.btn-align-left
+              !{" "+__("Back")}
+          li
+            a.btn.btn-align-left.horizon_menu_index(href='#upload_file')
+              i.icon-remove-circle.btn-align-left
+              !{" "+__("Upload File")}
+          li
+            a.btn.btn-align-left.horizon_menu_index(href='#edit_material')
+              i.icon-edit.btn-align-left
+              !{" "+__("Edit")}
+          li
+            a.btn.btn-align-left.horizon_menu_index(href='#remove_material')
+              i.icon-remove-circle.btn-align-left
+              !{" "+__("Remove")}
+          li.divider
+          li
+            h4 
+              a(href='#')   
+                !{material.name}
+          li.divider
+          li
+            p !{material.description}
+          li.divider
+
+
     .span6
+      #upload_file.horizon_menu_item.well
+        h4 !{__('Upload File')}
+        form.form-inline(enctype="multipart/form-data",method='post',action='/material/add_file?channel='+material._channel+'&id='+material._id)
+          input.input(type='file',name='file1',placeholder=__('File'))
+          button.btn !{__('Save')}
+      #edit_material.horizon_menu_item.well
+        form.form-inline(action='/material/edit?channel='+material._channel+'&id='+material._id,method='post')
+          h4 !{__('Edit')}
+          input.input(type='text',name='name',placeholder=__('Name'),value=material.name)
+          textarea.input(name='description',placeholder=__('Description'))
+            !{material.description}
+          button.btn(typ='submit') !{__('Save')}
+      #remove_material.horizon_menu_item.well
+        h4 !{__('Remove')}
+        .row-fluid
+          .span2
+            img(src='/img/alert.png')
+          .span8
+            p !{__('This Material will be completely removed! Proceed anyway?')}
+            a.btn.btn-danger(href='/material/delete?channel='+material._channel+'&id='+material._id) !{__('Remove')}
+
+
+      hr.title
+      h4 !{__('Files')}
       -for(var i = 0; i < material.files.length; i++)
-        a(href='#')
-          div.well
-            p !{material.files[i].name + ' - ' + material.files[i].path}
-              a(href='#',style='float:right')
-                i.icon-remove.uninvite
+        div.well
+          p !{material.files[i].name + ' - ' + material.files[i].path}
+            a(href='/material/delete_file?channel='+material._channel+'&id='+material._id+'&path='+material.files[i].path,style='float:right;margin-left:10px')
+              i.icon-remove.uninvite
+            a(href='/material/download?channel='+material._channel+'&id='+material._id+'&path='+material.files[i].path,style='float:right')
+              i.icon-download-alt
+
+block script
+  script(src='/js/horizon-menu.js')
+  script.
+    (function($) {
+      $('div.horizon_menu_item').hide();
+      HorizonMenu.init(['#edit_material','#remove_material','#upload_file']);
+    })(jQuery);
