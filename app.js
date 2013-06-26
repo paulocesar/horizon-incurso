@@ -63,7 +63,7 @@ require('./horizon.js')({
         socket.on('message', function (data) {
           if (data.sender == sender) {
             socket.broadcast.emit('message', data.data);
-            console.log(data);
+            // console.log(data);
           }
         });
       });

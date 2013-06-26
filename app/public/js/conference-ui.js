@@ -99,6 +99,7 @@ function captureUserMedia(callback) {
 
 /* on page load: get public rooms */
 conferenceUI = conference(config);
+console.log(conferenceUI);
 
 /* UI specific */
 participants = document.getElementById("participants") || document.body;

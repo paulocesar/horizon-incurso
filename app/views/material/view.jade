@@ -30,6 +30,14 @@ block content
                 !{material.name}
           li.divider
           li
+            -if(material.format == 1)
+              p !{__('Slide for Conference')}
+            -else if(material.format == 2)
+              p !{__('Video Course')}
+            -else
+              p !{__('General')}
+          li.divider
+          li
             p !{material.description}
           li.divider
 
@@ -38,7 +46,12 @@ block content
       #upload_file.horizon_menu_item.well
         h4 !{__('Upload File')}
         form.form-inline(enctype="multipart/form-data",method='post',action='/material/add_file?channel='+material._channel+'&id='+material._id)
-          input.input(type='file',name='file1',placeholder=__('File'))
+          -if(material.format == 1)
+            input.input(type='file',name='file1',placeholder=__('File'),accept='image/*')
+          -else if(material.format == 2)
+            input.input(type='file',name='file1',placeholder=__('File'),accept='video/*')
+          -else
+            input.input(type='file',name='file1',placeholder=__('File'))
           button.btn !{__('Save')}
       #edit_material.horizon_menu_item.well
         form.form-inline(action='/material/edit?channel='+material._channel+'&id='+material._id,method='post')

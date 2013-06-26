@@ -55,14 +55,6 @@ block content
           li
             p !{chan._owner.name} !{'('+chan._owner.email+')'}
     .span6
-      div
-        hr
-        h4 !{__('Conference')}
-        input#conference-room.input(type='hidden',value='private-'+chan._id)
-        p
-          i.icon-info-sign
-          | !{' '+__('If exists any online conference now, It will be listed bellow.')}
-        table#rooms-list.table
       -if(session_user.role == 1 || session_user._id == chan._owner._id)
         #1.horizon_menu_item.well.visible
           h4 !{__('Start Live Conference')}
@@ -77,7 +69,15 @@ block content
               !{' '+__('A Material is used to group archives (pdf, powerpoint, videos, etc)')}
             input.input(type='text',name='name',placeholder=__('Name'))
             textarea.input(name='description',placeholder=__('Description'))
-            input.input(type='file',name='file1',placeholder=__('File'))
+            p
+              i.icon-info-sign
+              !{' '}
+              span#format_info !{__('Material accepts any Format')}
+            select#format_material
+              option(value=0) !{__('General')}
+              option(value=1) !{__('Slide for Conference')}
+              option(value=2) !{__('Video Course')}
+            input#format_upload.input(type='file',name='file1',placeholder=__('File'))
             button.btn !{__('Save')}
         #3.horizon_menu_item.well
           h4 !{__('Invite User')}
@@ -119,6 +119,14 @@ block content
 
 
 
+      div
+        hr
+        h4 !{__('Conference')}
+        input#conference-room.input(type='hidden',value='private-'+chan._id)
+        p
+          i.icon-info-sign
+          | !{' '+__('If exists any online conference now, It will be listed bellow.')}
+        table#rooms-list.table
 
       hr.title
       h4 !{__('Material')}
@@ -139,7 +147,7 @@ block content
                     i.icon-download-alt(style='float:right')
           
     .span3
-
+      a.btn(href='#',onclick='conferenceUI.chat({message:"hello world"})') chat
 block script
   script(src='/js/horizon-menu.js')
   script(src='/js/socket.io.js')
@@ -150,4 +158,19 @@ block script
     (function($) {
       $('div.horizon_menu_item').hide();
       HorizonMenu.init(['#1','#2','#3','#4','#5','#6']);
+      $('select#format_material').change(function (){
+        val = $(this).prop('value');
+        if(val == 0) {
+          $('input#format_upload').prop('accept','');
+          $('span#format_info').html(!{'"'+__('Material accepts any Format')+'"'})
+        }
+        if(val == 1) {
+          $('input#format_upload').prop('accept','image/*');
+          $('span#format_info').html(!{'"'+__('Material accepts only Images')+'"'})
+        }
+        if(val == 2) {
+          $('input#format_upload').prop('accept','video/*');
+          $('span#format_info').html(!{'"'+__('Material accepts only Videos')+'"'})
+        }
+      });
     })(jQuery);

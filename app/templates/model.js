@@ -7,4 +7,7 @@ var model = Schema({
 
 // model.path('name').required(true);
 
-module.exports = model;
+module.exports.schema = model;
+module.exports.methods = {
+
+};

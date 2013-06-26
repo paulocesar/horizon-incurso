@@ -49,6 +49,12 @@ module.exports = {
   'Upload File' : 'Adicionar Arquivo',
   'This Material will be completely removed! Proceed anyway?' : 'Este Material vai ser totalmente removido! Deseja Proceguir?',
   'This Channel will be completely removed! Proceed anyway?' : 'Este Canal vai ser totalmente removido! Deseja Proceguir?',
-  'If exists any online conference now, It will be listed bellow.' : 'Se Houver qualquer conferência online agora, ela será listada abaixo.'
-
+  'If exists any online conference now, It will be listed bellow.' : 'Se Houver qualquer conferência online agora, ela será listada abaixo.',
+  'Material accepts any Format' : 'Material aceita qualquer formato de arquivo',
+  'Material accepts only Images' : 'Material aceita apenas imagens',
+  'Material accepts only Videos' : 'Material aceita apenas vídeos',
+  'Slide for Conference' : 'Apresentação para Conferência',
+  'Video Course' : 'Curso em Vídeo',
+  'General' : 'Arquivo em Geral',
+  
 }

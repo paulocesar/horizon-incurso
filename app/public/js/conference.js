@@ -238,6 +238,20 @@ var conference = function (config) {
                 joinUser   : _config.joinUser
             });
             console.log(defaultSocket);
+        },
+        chat : function (_config) {
+            defaultSocket.send({
+                userToken : self.userToken,
+                roomToken : self.roomToken,
+                chat : _config.message
+            });
+        },
+        slide : function (_config) {
+            defaultSocket.send({
+                userToken : self.userToken,
+                roomToken : self.roomToken,
+                slide : _config.message
+            });
         }
     };
 };

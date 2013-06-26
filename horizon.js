@@ -288,7 +288,12 @@ var Horizon = {
       if(models[i].match(/(.*)[.]js/)) {
         name = models[i].match(/(.*)[.]js/)[1];
         Horizon.h_models.push(name);
-        global[name] = mongoose.model(name, require(Horizon.ROOT+'models/'+name+'.js'));
+        model = require(Horizon.ROOT+'models/'+name+'.js');
+        global[name] = mongoose.model(name, model.schema);
+        for(var key in model.methods) {
+          global[name][key] = model.methods[key];
+          // console.log(global[name]) 
+        }
       }
     }
   },

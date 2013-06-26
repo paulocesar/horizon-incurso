@@ -17,5 +17,8 @@ model.path('name').required(true);
 model.path('password').required(true);
 model.path('role').required(true);
 
-module.exports = model;
+module.exports.schema = model;
+module.exports.methods = {
+
+};
 

@@ -11,4 +11,7 @@ model.path('name').required(true);
 model.path('description').required(true);
 model.path('_owner').required(true);
 
-module.exports = model;
+module.exports.schema = model;
+module.exports.methods = {
+
+};

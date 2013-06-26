@@ -8,4 +8,7 @@ model.path('level').required(true);
 model.path('_channel').required(true);
 model.path('_user').required(true);
 
-module.exports = model;
+module.exports.schema = model;
+module.exports.methods = {
+
+};
