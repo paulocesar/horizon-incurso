@@ -31,10 +31,10 @@ config = {
     onRemoteStream: function (media) {
         var video = media.video;
         video.setAttribute('controls', true);
-        video.setAttribute('class','span12');
-        document.getElementById('conference_window').style.display = 'block';
+        video.setAttribute('style','width:100%');
 
         participants.insertBefore(video, participants.firstChild);
+        // participants.appendChild(video);
         video.play();
         rotateVideo(video);
     },
@@ -53,12 +53,12 @@ config = {
 
         tr.onclick = function () {
             var tr = this;
-            // captureUserMedia(function () {
+            captureUserMedia(function () {
                 conferenceUI.joinRoom({
                     roomToken: tr.querySelector('.join').id,
                     joinUser : tr.id
                 });
-            // });
+            });
             hideUnnecessaryStuff();
         };
     }
@@ -67,19 +67,23 @@ config = {
 function createButtonClickHandler() {
     captureUserMedia(function () {
         conferenceUI.createRoom({
-            roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
+            roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous',
+            slides: SL.slides,
+            current: SL.slide_current
         });
     });
     hideUnnecessaryStuff();
+    createSlide();
 }
 
 function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
     video.setAttribute('controls', true);
-    video.setAttribute('class','span12');
+    video.setAttribute('style','width:100%');
     document.getElementById('conference_window').style.display = 'block';
-    participants.insertBefore(video, participants.firstChild);
+    // participants.insertBefore(video, participants.firstChild);
+    participants.appendChild(video);
 
     getUserMedia({
         video    : video,
@@ -102,9 +106,62 @@ conferenceUI = conference(config);
 console.log(conferenceUI);
 
 /* UI specific */
+var SL = {
+    slides : null,
+    slide_current : document.getElementById("slide-number"),
+    slide_btn_previous : document.getElementById("slide-btn-previous"),
+    slide_btn_next : document.getElementById("slide-btn-next"),
+}
+
+
+function set_slide() {
+    console.log(SL.slides);
+    console.log(SL.slide_current);
+    document.getElementById('slide-image').src = '/download/'+SL.slides[SL.slide_current.value].path;
+}
+
+function createSlide() {
+    mat_id = document.getElementById('conference-slide').value;
+    if(mat_id == '0') {
+        document.getElementById('slide-viewer').innerHTML = '<br><br><br><h1 style="text-align:center">Nenhum Slide Encontrado</h1>';
+    } else {
+        $.get('/material/list_files',{id:mat_id},function(data){
+           if(data.length >0) {
+                SL.slides = data;
+                SL.slide_btn_previous.onclick = function(){
+                    if(SL.slide_current.value > 0)
+                        SL.slide_current.value = parseInt(SL.slide_current.value) - 1;
+                    set_slide();
+                }
+                SL.slide_btn_next.onclick = function(){
+                    if(SL.slide_current.value < SL.slides.length - 1)
+                        SL.slide_current.value = parseInt(SL.slide_current.value)  + 1;
+                    set_slide();
+                }
+                document.getElementById('slide-image').src = '/download/'+data[0].path;
+            } else {
+                document.getElementById('slide-viewer').innerHTML = '<br><br><br><h1 style="text-align:center">Nenhum Slide Encontrado</h1>';
+            }
+        });
+    }
+}
+
 participants = document.getElementById("participants") || document.body;
 startConferencing = document.getElementById('start-conferencing');
 roomsList = document.getElementById('rooms-list');
+
+function chat_send() {
+    mess = document.getElementById('chat-name').value + ': ' + document.getElementById('chat-message').value;
+    document.getElementById('chat-message').value = '';
+    var p = document.createElement('p');
+    p.innerHTML = mess;
+    document.getElementById('chat-message-history').insertBefore(p, document.getElementById('chat-message-history').firstChild);
+    conferenceUI.chat({
+        message: mess
+    });
+}
+
+document.getElementById('chat-send').onclick = chat_send;
 
 if (startConferencing) startConferencing.onclick = createButtonClickHandler;
 
@@ -114,6 +171,7 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
+    document.getElementById('conference_window').style.display = 'block';
 }
 
 function rotateVideo(video) {

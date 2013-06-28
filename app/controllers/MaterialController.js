@@ -6,8 +6,14 @@ module.exports = {
   delete_file : function (req, res) {
 
   },
-  download : function (req, res) {
 
+  list_files : function (req, res) {
+    Material.findOne({_id:req.query.id}).exec(function(err,material){
+      if(err || !material)
+        req.json([]);
+      else
+        res.json(material.files);
+    });
   },
 
   edit : function (req, res) {
@@ -48,7 +54,7 @@ module.exports = {
     fs.readFile(req.files.file1.path, function (err, data) {
       filename = Utils.dateToFilename()+'-'+req.files.file1.name.replace(/ /g,'');
       name_orig = req.files.file1.name;
-      var newPath = "./app/uploads/"+filename;
+      var newPath = "./app/public/download/"+filename;
       fs.writeFile(newPath, data, function (err) {
         if(err) { 
           req.flash('error','Arquivos não encontrado');
@@ -81,7 +87,7 @@ module.exports = {
     fs.readFile(req.files.file1.path, function (err, data) {
       filename = Utils.dateToFilename()+'-'+req.files.file1.name.replace(/ /g,'');
       name_orig = req.files.file1.name;
-      var newPath = "./app/uploads/"+filename;
+      var newPath = "./app/public/download/"+filename;
       fs.writeFile(newPath, data, function (err) {
         if(err) { 
           req.flash('error','Arquivos não encontrado');
@@ -90,6 +96,7 @@ module.exports = {
           Material({
             name: req.body.name,
             description: req.body.description,
+            format:req.body.format,
             files: [{name: name_orig, path: filename}],
             _channel: req.session.channel._id
           })
@@ -99,8 +106,14 @@ module.exports = {
               res.redirect('/channel/view?channel='+req.session.channel._id);
             } else {
               req.flash('success','Material criado');
-              Material.findOne({name:req.body.name,description:req.body.description}).sort({_id:-1}).exec(function (err,mat){
-                if(err) {
+              Material.findOne({
+                name:req.body.name,
+                description:req.body.description,
+                format:req.body.format
+              })
+              .sort({_id:-1})
+              .exec(function (err,mat){
+                if(err || !mat) {
                   req.flash('error','Não foi possível encontrar o material');
                   res.redirect('/channel/view?channel='+req.session.channel._id);
                 } else {
@@ -115,12 +128,12 @@ module.exports = {
   },
 
   delete : function(req,res) {
-    Channel.remove({_id:req.query.id},function(err){
+    Material.remove({_id:req.query.id},function(err){
       if(err)
         req.flash('error','Houve um erro no banco!');
       else
         req.flash('success','Material removido com sucesso');
-      res.redirect('/channel/view?channel='+req.session.channel._id);
+      res.redirect('/channel/view?channel='+req.query.channel);
     });
   },
 

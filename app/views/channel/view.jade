@@ -6,7 +6,21 @@ block content
     h4 !{__('Conference')}
     .row-fluid
       .span4
-        #participants
+        #participants.span12
+      .span8
+        #slide-viewer
+          -if(session_user.role == 1 || session_user.role == 2)
+            button#slide-btn-previous <
+            button#slide-btn-next >
+          input#slide-number(type='hidden',value='0')
+          img#slide-image
+        input#chat-name(type='hidden',value=session_user.name)
+        .well(style="height:200px;overflow-y: scroll;overflow-x: hidden;")
+          .span12
+            input#chat-message(style='width:70%')
+            a#chat-send.btn(href='#',style="margin-top:-3px;width:15%") !{__('Send')}
+          br
+          div#chat-message-history
   .row-fluid
     .span3
       hr.title
@@ -18,7 +32,7 @@ block content
               i.icon-chevron-left.btn-align-left
               !{" "+__("Back")}
           -if(session_user.role == 1 || session_user._id == chan._owner._id)
-            li
+            li.visible
               a.btn.btn-align-left.horizon_menu_index(href='#1')
                 i.icon-play.btn-align-left
                 !{" "+__("Conference")}
@@ -60,6 +74,12 @@ block content
           h4 !{__('Start Live Conference')}
           //- form.form-inline
           input#conference-name.input(type='text',placeholder=__('Name'))
+          select#conference-slide
+            option(value=0) (selecione um slide)
+            -for(var i in materials)
+              -if(materials[i].format == 1)
+                option(value=materials[i]._id) !{materials[i].name}
+          br
           button#start-conferencing.btn !{__('Enter')}
         #2.horizon_menu_item.well
           h4 !{__('Add Material')}
@@ -73,7 +93,7 @@ block content
               i.icon-info-sign
               !{' '}
               span#format_info !{__('Material accepts any Format')}
-            select#format_material
+            select#format_material(name='format')
               option(value=0) !{__('General')}
               option(value=1) !{__('Slide for Conference')}
               option(value=2) !{__('Video Course')}
@@ -119,7 +139,7 @@ block content
 
 
 
-      div
+      div.visible
         hr
         h4 !{__('Conference')}
         input#conference-room.input(type='hidden',value='private-'+chan._id)
@@ -142,12 +162,11 @@ block content
             p !{materials[i].description}
             -files = materials[i].files
             -for(var j = 0; j < files.length; j++)
-                a(href='/material/download?channel='+chan._id+'&id='+materials[i]._id+'&path='+files[j].path)
+                a(href='/download/'+files[j].path)
                   p.file !{files[j].name}
                     i.icon-download-alt(style='float:right')
           
     .span3
-      a.btn(href='#',onclick='conferenceUI.chat({message:"hello world"})') chat
 block script
   script(src='/js/horizon-menu.js')
   script(src='/js/socket.io.js')
@@ -156,8 +175,11 @@ block script
   script(src='/js/conference-ui.js')
   script.
     (function($) {
+      
       $('div.horizon_menu_item').hide();
+
       HorizonMenu.init(['#1','#2','#3','#4','#5','#6']);
+
       $('select#format_material').change(function (){
         val = $(this).prop('value');
         if(val == 0) {
@@ -173,4 +195,5 @@ block script
           $('span#format_info').html(!{'"'+__('Material accepts only Videos')+'"'})
         }
       });
+
     })(jQuery);

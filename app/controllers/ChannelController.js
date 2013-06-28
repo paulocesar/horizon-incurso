@@ -1,6 +1,6 @@
 module.exports = {
   index : function(req,res) {
-
+    console.log(req.query);
     conditions = {};
     if(typeof req.body.q !== 'undefined') {
       conditions['name'] = new RegExp('.*'+req.body.q+'.*','i');

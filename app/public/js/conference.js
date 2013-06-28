@@ -22,6 +22,18 @@ var conference = function (config) {
         console.log(response);
         if (response.userToken == self.userToken) return;
 
+        if(typeof response.slide != 'undefined' && response.slide != null) {
+            path = '/download/'+ response.slide.path;
+            if(document.getElementById('slide-image').src != path)
+                document.getElementById('slide-image').src = path;
+        }
+
+        if(typeof response.chat != undefined && response.chat != null) {
+            var p = document.createElement('p');
+            p.innerHTML = response.chat;
+            document.getElementById('chat-message-history').insertBefore(p, document.getElementById('chat-message-history').firstChild);
+        }
+
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
 
         if (response.newParticipant) onNewParticipant(response.newParticipant);
@@ -179,13 +191,21 @@ var conference = function (config) {
     }
 
     function startBroadcasting() {
-        defaultSocket && defaultSocket.send({
-            roomToken  : self.roomToken,
-            roomName   : self.roomName,
-            broadcaster: self.userToken,
-            user_id: "hello world"
-            /*definir o user_id e o group_id aqui*/
-        });
+        if(typeof self.slides != 'undefined' && self.slides != null && self.slides.length > 0)
+            defaultSocket && defaultSocket.send({
+                roomToken  : self.roomToken,
+                roomName   : self.roomName,
+                broadcaster: self.userToken,
+                slide : self.slides[self.current.value],
+                /*definir o user_id e o group_id aqui*/
+            });
+        else
+            defaultSocket && defaultSocket.send({
+                roomToken  : self.roomToken,
+                roomName   : self.roomName,
+                broadcaster: self.userToken
+                /*definir o user_id e o group_id aqui*/
+            });
         setTimeout(startBroadcasting, 3000);
     }
 
@@ -219,6 +239,8 @@ var conference = function (config) {
         createRoom: function (_config) {
             self.roomName = _config.roomName || 'Anonymous';
             self.roomToken = uniqueToken();
+            self.slides = _config.slides;
+            self.current = _config.current;
 
             isbroadcaster = true;
             isGetNewRoom = false;

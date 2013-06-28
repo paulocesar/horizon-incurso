@@ -37,10 +37,11 @@ require('./horizon.js')({
       socket.on('new-channel', function (data) {
         channels[data.channel] = data.channel;
         onNewNamespace(data.channel, data.sender);
-        // console.log(data);
+        console.log(data);
       });
 
       socket.on('presence', function (channel) {
+        console.log(data);
         var isChannelPresent = !!channels[channel];
         socket.emit('presence', isChannelPresent);
         if (!isChannelPresent)
@@ -63,7 +64,7 @@ require('./horizon.js')({
         socket.on('message', function (data) {
           if (data.sender == sender) {
             socket.broadcast.emit('message', data.data);
-            // console.log(data);
+            console.log(data);
           }
         });
       });

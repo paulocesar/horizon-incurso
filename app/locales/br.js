@@ -56,5 +56,5 @@ module.exports = {
   'Slide for Conference' : 'Apresentação para Conferência',
   'Video Course' : 'Curso em Vídeo',
   'General' : 'Arquivo em Geral',
-  
+  'Send' : 'Enviar',
 }
