@@ -237,9 +237,25 @@ var RTCPeerConnection = function (options) {
     };
 };
 
+/**
+1280, 720,
+960, 720,
+640, 360,
+640, 480,
+320, 240,
+320, 180
+https://runnable.com/UXgzNO_v2oZyAADG/make-a-payment-with-paypal-api-node-js
+http://dev.w3.org/2011/webrtc/editor/getusermedia.html#idl-def-MediaTrackConstraints
+http://lists.w3.org/Archives/Public/public-webrtc/2012Mar/0082.html
+*/
 var video_constraints = {
-    mandatory: {},
-    optional: []
+    mandatory: {
+        maxWidth: 320,
+        maxHeight: 240,
+        minFrameRate: 28
+    },
+    optional: [ 
+    ]
 };
 
 function getUserMedia(options) {
@@ -247,7 +263,9 @@ function getUserMedia(options) {
     n.getMedia = n.webkitGetUserMedia || n.mozGetUserMedia;
     n.getMedia(options.constraints || {
         audio: true,
-        video: video_constraints
+        video: video_constraints,
+        videoMaxBandwidth: 1000, 
+        videoMinBandwidth: 400 
     }, streaming, options.onerror || function (e) {
         console.error(e);
     });

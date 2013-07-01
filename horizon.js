@@ -18,14 +18,14 @@ if(typeof process.argv[2] != 'undefined' && typeof process.argv[3] != 'undefined
 
   if(process.argv[2] == 'controller' || process.argv[2] == 'generate' ) {
     name = process.argv[3].capitalize();
-    console.log('generating controller ' + name + ' ...');
+    // console.log('generating controller ' + name + ' ...');
     src = 'app/templates/controller.js';
     dst = 'app/controllers/'+name+'Controller.js';
     copy(src,dst);
   }
   if(process.argv[2] == 'model' || process.argv[2] == 'generate') {
     name = process.argv[3].capitalize();
-    console.log('generating model ' + name + ' ...');
+    // console.log('generating model ' + name + ' ...');
     src = 'app/templates/model.js';
     dst = 'app/models/'+name+'.js';
     copy(src,dst);

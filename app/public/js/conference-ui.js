@@ -103,7 +103,7 @@ function captureUserMedia(callback) {
 
 /* on page load: get public rooms */
 conferenceUI = conference(config);
-console.log(conferenceUI);
+// console.log(conferenceUI);
 
 /* UI specific */
 var SL = {
@@ -115,8 +115,8 @@ var SL = {
 
 
 function set_slide() {
-    console.log(SL.slides);
-    console.log(SL.slide_current);
+    // console.log(SL.slides);
+    // console.log(SL.slide_current);
     document.getElementById('slide-image').src = '/download/'+SL.slides[SL.slide_current.value].path;
 }
 

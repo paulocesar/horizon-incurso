@@ -19,7 +19,7 @@ var conference = function (config) {
     }
 
     function onDefaultSocketResponse(response) {
-        console.log(response);
+        // console.log(response);
         if (response.userToken == self.userToken) return;
 
         if(typeof response.slide != 'undefined' && response.slide != null) {
@@ -196,7 +196,7 @@ var conference = function (config) {
                 roomToken  : self.roomToken,
                 roomName   : self.roomName,
                 broadcaster: self.userToken,
-                slide : self.slides[self.current.value],
+                slide : {path: self.slides[self.current.value].path},
                 /*definir o user_id e o group_id aqui*/
             });
         else
