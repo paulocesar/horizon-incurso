@@ -123,7 +123,7 @@ function set_slide() {
 function createSlide() {
     mat_id = document.getElementById('conference-slide').value;
     if(mat_id == '0') {
-        document.getElementById('slide-viewer').innerHTML = '<br><br><br><h1 style="text-align:center">Nenhum Slide Encontrado</h1>';
+        document.getElementById('slide-viewer').innerHTML = '';
     } else {
         $.get('/material/list_files',{id:mat_id},function(data){
            if(data.length >0) {
@@ -140,7 +140,7 @@ function createSlide() {
                 }
                 document.getElementById('slide-image').src = '/download/'+data[0].path;
             } else {
-                document.getElementById('slide-viewer').innerHTML = '<br><br><br><h1 style="text-align:center">Nenhum Slide Encontrado</h1>';
+                document.getElementById('slide-viewer').innerHTML = '';
             }
         });
     }
