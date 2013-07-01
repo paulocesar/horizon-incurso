@@ -210,7 +210,7 @@ var RTCPeerConnection = function (options) {
     }
 
     function info(information) {
-        console.log(information);
+        // console.log(information);
     }
 
     return {
@@ -252,9 +252,25 @@ var video_constraints = {
     mandatory: {
         maxWidth: 320,
         maxHeight: 240,
-        minFrameRate: 28
+        minFrameRate: 20,
+        maxFrameRate: 30,
+
+        // video-max-width: 320,
+        // video-max-height: 180,
+        // video-min-aspectratio:  1.333333333333,
+        // video-max-aspectratio:  1.333333333333,
+        // video-min-framerate:  24,
+        // video-max-framerate:  60,
+        // video-min-pixelrate:  15,
+        // video-max-pixelrate:  47,
+        // video-min-timebetweenkeyframes;  20,
+        // video-max-timebetweenkeyframes:  40
     },
     optional: [ 
+        // maxWidth: 320,
+        // maxHeight: 180,
+        // minFrameRate: 20,
+        // maxFrameRate: 30
     ]
 };
 
@@ -264,7 +280,7 @@ function getUserMedia(options) {
     n.getMedia(options.constraints || {
         audio: true,
         video: video_constraints,
-        videoMaxBandwidth: 1000, 
+        videoMaxBandwidth: 3000, 
         videoMinBandwidth: 400 
     }, streaming, options.onerror || function (e) {
         console.error(e);

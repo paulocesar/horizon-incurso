@@ -35,13 +35,13 @@ require('./horizon.js')({
         io.connected = true;
 
       socket.on('new-channel', function (data) {
-        channels[data.channel] = data.channel;
+        // channels[data.channel] = data.channel;
         onNewNamespace(data.channel, data.sender);
         console.log(data);
       });
 
       socket.on('presence', function (channel) {
-        console.log(data);
+        // console.log(data);
         var isChannelPresent = !!channels[channel];
         socket.emit('presence', isChannelPresent);
         if (!isChannelPresent)
