@@ -2,7 +2,7 @@ var channels = {};
 
 require('./horizon.js')({
   
-  port: 1337,
+  port: 8764,
 
 
   language: 'br',
