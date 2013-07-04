@@ -22,18 +22,6 @@ var conference = function (config) {
         // console.log(response);
         if (response.userToken == self.userToken) return;
 
-        if(typeof response.slide != 'undefined' && response.slide != null) {
-            path = '/download/'+ response.slide.path;
-            if(document.getElementById('slide-image').src != path)
-                document.getElementById('slide-image').src = path;
-        }
-
-        if(typeof response.chat != undefined && response.chat != null) {
-            var p = document.createElement('p');
-            p.innerHTML = response.chat;
-            document.getElementById('chat-message-history').insertBefore(p, document.getElementById('chat-message-history').firstChild);
-        }
-
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
 
         if (response.newParticipant) onNewParticipant(response.newParticipant);
@@ -45,6 +33,20 @@ var conference = function (config) {
                 channel    : response.channel || response.userToken,
                 closeSocket: true
             });
+        }
+
+        if(typeof response.slide != 'undefined' && response.slide != null) {
+            path = '/download/'+ response.slide.path;
+            if(document.getElementById('slide-image').src != path)
+                document.getElementById('slide-image').src = path;
+
+        }
+
+        if(typeof response.chat != undefined && response.chat != null) {
+            var p = document.createElement('p');
+            p.innerHTML = response.chat;
+            document.getElementById('chat-message-history').insertBefore(p, document.getElementById('chat-message-history').firstChild);
+            return;
         }
     }
 
