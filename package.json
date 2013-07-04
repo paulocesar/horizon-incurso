@@ -8,6 +8,7 @@
     "jade": "0.31.2",
     "mongoose": "3.6.11",
     "socket.io": "0.9.16",
-    "paypal-rest-sdk" : "0.6.1"
+    "paypal-rest-sdk" : "0.6.1",
+    "opentok" : "0.3.x"
   }
 }
